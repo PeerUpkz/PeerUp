@@ -1,0 +1,1170 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PeerUp</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Nunito:wght@500;700;800&family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap">
+<style>
+:root{
+  /* public: тетрадь */
+  --paper:#FAFBFD;--paper-2:#F1F5FA;--grid:#DCE6F3;--card:#FFFFFF;--line:#C8D5E8;--ink:#12213D;--ink-2:#4F607C;
+  --pen:#1F46B4;--on-pen:#FFFFFF;--pen-soft:#E4ECFB;--red:#D3302C;--mark:#FFE98A;--ok:#1B7F4B;--warn:#A35A00;
+  /* admin: пульт */
+  --ad-bg:#F3F5F4;--ad-panel:#FFFFFF;--ad-panel2:#ECF0EE;--ad-line:#D5DCD9;--ad-ink:#0E1B1A;--ad-mute:#5B6B68;
+  --ad-acc:#0B6E65;--ad-on:#FFFFFF;--ad-ok:#1B7F4B;--ad-warn:#A35A00;--ad-bad:#C2362F;
+  /* student: приложение */
+  --st-bg:#FFF6EA;--st-card:#FFFFFF;--st-ink:#2A1B3D;--st-mute:#6E5F80;--st-acc:#E5481F;--st-acc2:#5B3FE0;
+  --st-on:#FFFFFF;--st-soft:#FFE6D9;--st-line:#F1D9C3;--st-yel:#FFC93C;
+  --cu-bg:#F5F3FF;--cu-card:#FFFFFF;--cu-ink:#1E1B4B;--cu-mute:#5B5890;--cu-acc:#4F46E5;--cu-on:#FFFFFF;--cu-soft:#E7E5FF;--cu-line:#D9D6F5;--cu-ok:#15803D;--cu-warn:#B45309;
+  --view-bg:var(--paper);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D1526;--paper-2:#121C31;--grid:#1B2A47;--card:#15213A;--line:#2A3B5E;--ink:#E8EEFA;--ink-2:#9DB0CF;
+  --pen:#7C9DFF;--on-pen:#0B1430;--pen-soft:#1A2850;--red:#FF7770;--mark:rgba(255,214,90,.30);--ok:#5FD39A;--warn:#F2B35B;
+  --ad-bg:#0C1211;--ad-panel:#131C1B;--ad-panel2:#1A2625;--ad-line:#243433;--ad-ink:#E6F0EE;--ad-mute:#8FA6A2;
+  --ad-acc:#3FD0BF;--ad-on:#05201C;--ad-ok:#5FD39A;--ad-warn:#F2B35B;--ad-bad:#FF7770;
+  --st-bg:#17102A;--st-card:#231A3D;--st-ink:#F4EEFF;--st-mute:#B3A6D1;--st-acc:#FF7A59;--st-acc2:#9B86FF;
+  --st-on:#1A0F10;--st-soft:#3A2450;--st-line:#3A2D5C;--st-yel:#FFD25E;--cu-bg:#0F0E24;--cu-card:#191838;--cu-ink:#ECEBFF;--cu-mute:#A5A3D6;--cu-acc:#8B8BFF;--cu-on:#0B0A20;--cu-soft:#26244F;--cu-line:#302E5E;--cu-ok:#5FD39A;--cu-warn:#F2B35B;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1526;--paper-2:#121C31;--grid:#1B2A47;--card:#15213A;--line:#2A3B5E;--ink:#E8EEFA;--ink-2:#9DB0CF;
+  --pen:#7C9DFF;--on-pen:#0B1430;--pen-soft:#1A2850;--red:#FF7770;--mark:rgba(255,214,90,.30);--ok:#5FD39A;--warn:#F2B35B;
+  --ad-bg:#0C1211;--ad-panel:#131C1B;--ad-panel2:#1A2625;--ad-line:#243433;--ad-ink:#E6F0EE;--ad-mute:#8FA6A2;
+  --ad-acc:#3FD0BF;--ad-on:#05201C;--ad-ok:#5FD39A;--ad-warn:#F2B35B;--ad-bad:#FF7770;
+  --st-bg:#17102A;--st-card:#231A3D;--st-ink:#F4EEFF;--st-mute:#B3A6D1;--st-acc:#FF7A59;--st-acc2:#9B86FF;
+  --st-on:#1A0F10;--st-soft:#3A2450;--st-line:#3A2D5C;--st-yel:#FFD25E;--cu-bg:#0F0E24;--cu-card:#191838;--cu-ink:#ECEBFF;--cu-mute:#A5A3D6;--cu-acc:#8B8BFF;--cu-on:#0B0A20;--cu-soft:#26244F;--cu-line:#302E5E;--cu-ok:#5FD39A;--cu-warn:#F2B35B;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--view-bg);padding-block:0;min-height:100vh;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body.v-public{--view-bg:var(--paper);color:var(--ink);font:16px/1.55 'Onest',system-ui,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+body.v-admin{--view-bg:var(--ad-bg);color:var(--ad-ink);font:14px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+body.v-student{--view-bg:var(--st-bg);color:var(--st-ink);font:16px/1.5 'Nunito',system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--view-bg);z-index:60}
+h1,h2,h3,p{margin:0}h1,h2,h3{text-wrap:balance;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1}
+.full{margin-left:calc(-1*max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ===== PUBLIC ===== */
+.pu .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1.5px solid var(--line)}
+.pu .hdr .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.pu .brand{font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:8px;margin-right:auto}
+.pu .brand i{width:30px;height:30px;border-radius:8px;background:var(--pen);color:var(--on-pen);display:grid;place-items:center;font-style:normal;font-size:.8rem}
+.pu .nav{display:flex;gap:2px}.pu .nav button{background:none;border:0;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink-2);font-weight:500}
+.pu .nav button:hover{background:var(--pen-soft);color:var(--pen)}
+@media(max-width:820px){.pu .nav{display:none}}
+.pbtn{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--pen);background:var(--pen);color:var(--on-pen);padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.2}
+.pbtn.ghost{background:transparent;color:var(--pen)}.pbtn.sm{padding:7px 12px;font-size:.9rem}
+.pu .sec{padding-block:42px}.pu .sec>h2{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;margin-bottom:20px}
+.pu .lead{color:var(--ink-2);max-width:62ch;margin-bottom:18px}
+.pu .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.pu .card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.pu .card h3{font-size:1.06rem;margin-bottom:6px}.pu .card p{color:var(--ink-2);font-size:.95rem}
+.pu .hero{display:grid;gap:28px;grid-template-columns:1.1fr .9fr;align-items:center;padding-block:46px 26px}
+@media(max-width:820px){.pu .hero{grid-template-columns:1fr}}
+.pu .eyebrow{font-family:'Caveat',cursive;font-size:1.5rem;color:var(--pen);font-weight:700}
+.pu .hero h1{font-size:clamp(2.1rem,6.4vw,3.5rem);font-weight:800;margin:4px 0 16px;letter-spacing:-.02em}
+.pu mark{background:linear-gradient(transparent 55%,var(--mark) 55%);color:inherit}
+.pu .hero p.t{color:var(--ink-2);font-size:1.08rem;max-width:52ch;margin-bottom:20px}
+.pu .note{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--red);border-radius:6px 14px 14px 6px;padding:18px 18px 22px 20px;position:relative;
+  background-image:repeating-linear-gradient(transparent 0 31px,var(--grid) 31px 32px);transform:rotate(1.2deg)}
+.pu .note small{display:block;font-weight:600;color:var(--ink-2);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;background:var(--card);width:max-content;max-width:100%;padding-right:6px}
+.pu .ln{font-family:'Caveat',cursive;font-size:1.7rem;line-height:32px;color:var(--pen);font-weight:500}
+.pu .rv{font-family:'Caveat',cursive;font-size:1.45rem;line-height:1.15;color:var(--red);font-weight:700;margin-top:10px;padding-right:60px}
+.pu .gr{position:absolute;right:16px;bottom:14px;font-family:'Caveat',cursive;font-weight:700;font-size:3rem;color:var(--red);border:3px solid var(--red);border-radius:50%;width:58px;height:58px;display:grid;place-items:center;transform:rotate(-10deg);line-height:1}
+.pu .chip{display:inline-block;background:var(--pen-soft);color:var(--pen);padding:4px 11px;border-radius:999px;font-weight:600;font-size:.88rem;border:0}
+.pu .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.pu .filters button{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:500}
+.pu .filters button[aria-pressed="true"]{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.pu .step .n{font-family:'Caveat',cursive;font-size:2.2rem;color:var(--pen);font-weight:700;line-height:1}
+.pu .tcard{display:flex;flex-direction:column;gap:8px}
+.pu .ava{width:46px;height:46px;border-radius:50%;background:var(--pen-soft);color:var(--pen);display:grid;place-items:center;font-weight:800}
+.pu .price{display:flex;flex-direction:column;gap:10px;position:relative}.pu .price.hl{border-color:var(--pen);box-shadow:0 0 0 3px var(--pen-soft)}
+.pu .badge{position:absolute;top:-12px;right:14px;background:var(--pen);color:var(--on-pen);font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:999px}
+.pu .amt{font-size:2.2rem;font-weight:800;line-height:1}.pu .amt small{display:block;font-size:.88rem;font-weight:500;color:var(--ink-2);margin-top:4px}
+.pu ul.ticks{list-style:none;margin:0;padding:0;display:grid;gap:6px}.pu ul.ticks li{padding-left:24px;position:relative}
+.pu ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+.pu .faq details{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:0 16px}.pu .faq details+details{margin-top:10px}
+.pu .faq summary{cursor:pointer;font-weight:600;padding:14px 0}.pu .faq details p{color:var(--ink-2);padding-bottom:14px}
+.pu .contact{background:var(--pen);color:var(--on-pen);border-radius:18px;padding:28px;display:grid;gap:14px}
+.pu .contact .pbtn{background:var(--on-pen);color:var(--pen);border-color:var(--on-pen)}
+.pu .ftr{padding-block:26px 40px;color:var(--ink-2);font-size:.9rem;border-top:1.5px solid var(--line);margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.demo{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.demo small{opacity:.7;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.pu .demo button{background:var(--paper-2);border:1.5px dashed var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.85rem;color:var(--ink-2)}
+@media(max-width:560px){.pu .demo small{display:none}}
+
+/* ===== ADMIN ===== */
+.ad{display:grid;grid-template-columns:220px minmax(0,1fr);gap:0;min-height:100vh;
+  margin-left:calc(-1*max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)))}
+@media(max-width:860px){.ad{grid-template-columns:minmax(0,1fr)}}
+.ad .side{background:var(--ad-panel);border-right:1px solid var(--ad-line);padding:16px 12px;padding-left:max(12px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:4px;
+  position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto}
+@media(max-width:860px){.ad .side{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--ad-line);padding:8px max(12px,env(safe-area-inset-left,0px));align-items:center}}
+.ad .logo{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:1rem;padding:6px 8px 14px;color:var(--ad-acc);white-space:nowrap}
+.ad .logo small{display:block;color:var(--ad-mute);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:860px){.ad .logo{padding:0 8px}.ad .logo small{display:none}}
+.ad .side button{background:none;border:0;text-align:left;padding:8px 10px;border-radius:6px;cursor:pointer;color:var(--ad-mute);white-space:nowrap;font-weight:500}
+.ad .side button:hover{background:var(--ad-panel2);color:var(--ad-ink)}
+.ad .side button[aria-current="page"]{background:var(--ad-acc);color:var(--ad-on)}
+.ad .side .sp{flex:1}
+.ad .main{padding:22px max(16px,env(safe-area-inset-right,0px)) 60px 22px;min-width:0;max-width:1100px}
+@media(max-width:860px){.ad .main{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}}
+.ad h1{font-size:1.35rem;font-weight:600;margin-bottom:4px}
+.ad .sub{color:var(--ad-mute);margin-bottom:18px}
+.ad .kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px}
+.ad .kpi{background:var(--ad-panel);border:1px solid var(--ad-line);border-radius:6px;padding:12px 14px}
+.ad .kpi b{display:block;font-family:'IBM Plex Mono',monospace;font-size:1.45rem;font-weight:500;margin-top:2px;overflow-wrap:anywhere}
+.ad .kpi span{color:var(--ad-mute);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.ad .panel{background:var(--ad-panel);border:1px solid var(--ad-line);border-radius:6px;padding:14px;margin-bottom:16px;min-width:0}
+.ad .panel h2{font-size:.95rem;font-weight:600;margin-bottom:10px}
+.ad .tw{overflow-x:auto}
+.ad table{border-collapse:collapse;width:100%;min-width:560px}
+.ad th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ad-mute);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--ad-line)}
+.ad td{padding:8px 10px;border-bottom:1px solid var(--ad-line);vertical-align:middle}
+.ad tr:last-child td{border-bottom:0}
+.ad .mono{font-family:'IBM Plex Mono',monospace}
+.ad .b{background:var(--ad-acc);color:var(--ad-on);border:1px solid var(--ad-acc);border-radius:5px;padding:6px 12px;cursor:pointer;font-weight:500}
+.ad .b.ghost{background:transparent;color:var(--ad-ink);border-color:var(--ad-line)}
+.ad .b.sm{padding:3px 8px;font-size:.82rem}
+.ad .b.bad{background:transparent;color:var(--ad-bad);border-color:var(--ad-bad)}.ad .b.bad.arm{background:var(--ad-bad);color:#fff}
+.ad .tag{display:inline-block;padding:1px 8px;border-radius:4px;font-size:.78rem;font-weight:500;background:var(--ad-panel2);color:var(--ad-mute)}
+.ad .tag.ok{color:var(--ad-ok)}.ad .tag.warn{color:var(--ad-warn)}.ad .tag.bad{color:var(--ad-bad)}
+.ad .frm{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}
+.ad .fl{display:flex;flex-direction:column;gap:3px;min-width:0}.ad .fl span{font-size:.78rem;color:var(--ad-mute)}
+.ad .fl input,.ad .fl select,.ad .fl textarea{padding:7px 9px;border:1px solid var(--ad-line);border-radius:5px;background:var(--ad-bg);width:100%;min-width:0}
+.ad .bar{height:8px;background:var(--ad-panel2);border-radius:4px;overflow:hidden}.ad .bar i{display:block;height:100%;background:var(--ad-acc)}
+.ad .hint{background:var(--ad-panel2);border-left:3px solid var(--ad-acc);padding:8px 12px;border-radius:4px;color:var(--ad-mute);margin-bottom:16px}
+.ad .chk{display:flex;gap:6px;align-items:center}
+
+/* ===== STUDENT ===== */
+.st .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--st-bg)}
+.st .hdr .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
+.st .brand{font-family:'Unbounded',sans-serif;font-weight:700;font-size:1.05rem;margin-right:auto;color:var(--st-acc2)}
+.st .brand b{color:var(--st-acc)}
+.st .ic{background:var(--st-card);border:2px solid var(--st-line);border-radius:14px;padding:7px 11px;cursor:pointer;font-weight:700}
+.st .page{max-width:760px;margin:0 auto;padding-block:6px 120px;display:grid;gap:16px}
+.st h1{font-family:'Unbounded',sans-serif;font-size:1.35rem;font-weight:700}
+.st h2{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:500;margin-bottom:8px}
+.st .card{background:var(--st-card);border:2px solid var(--st-line);border-radius:22px;padding:16px;min-width:0}
+.st .card.hot{background:var(--st-acc2);border-color:var(--st-acc2);color:#fff}
+.st .mute{color:var(--st-mute)}
+.st .sb{background:var(--st-acc);color:var(--st-on);border:0;border-radius:14px;padding:10px 16px;font-weight:800;cursor:pointer}
+.st .sb.alt{background:var(--st-acc2);color:#fff}.st .sb.ghost{background:transparent;color:var(--st-acc2);border:2px solid var(--st-acc2)}
+.st .sb.sm{padding:6px 12px;font-size:.88rem}
+.st .pill{display:inline-block;padding:3px 11px;border-radius:999px;font-weight:700;font-size:.82rem;background:var(--st-soft);color:var(--st-ink)}
+.st .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--st-card);border-top:2px solid var(--st-line);display:flex;justify-content:space-around;
+  padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+.st .tabs button{background:none;border:0;display:grid;gap:0;justify-items:center;padding:4px 8px;border-radius:14px;cursor:pointer;color:var(--st-mute);font-weight:700;font-size:.72rem;min-width:56px}
+.st .tabs button span{font-size:1.3rem}
+.st .tabs button[aria-current="page"]{color:var(--st-acc);background:var(--st-soft)}
+.st .chips{display:flex;gap:8px;flex-wrap:wrap}
+.st .chips button{background:var(--st-card);border:2px solid var(--st-line);border-radius:999px;padding:5px 13px;font-weight:700;cursor:pointer}
+.st .chips button[aria-pressed="true"]{background:var(--st-acc2);border-color:var(--st-acc2);color:#fff}
+.st .fl{display:flex;flex-direction:column;gap:3px}.st .fl span{font-weight:700;font-size:.85rem}
+.st input,.st select{padding:9px 11px;border:2px solid var(--st-line);border-radius:12px;background:var(--st-bg);width:100%;min-width:0}
+.st .list{display:grid;gap:12px}
+.st .cons{display:grid;gap:8px}
+.st .ava{width:48px;height:48px;border-radius:16px;background:var(--st-yel);color:#2A1B3D;display:grid;place-items:center;font-family:'Unbounded',sans-serif;font-weight:700}
+.st .bar{height:14px;background:var(--st-soft);border-radius:999px;overflow:hidden}.st .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--st-acc),var(--st-yel));border-radius:999px}
+.st .login{max-width:460px;margin:30px auto;display:grid;gap:16px}
+.st .hw{display:flex;gap:12px;align-items:center}.st .hw input{width:24px;height:24px;flex:none;accent-color:var(--st-acc2)}
+.st .done{text-decoration:line-through;opacity:.6}
+
+body.v-cabinet{--view-bg:var(--paper-2);color:var(--ink);font:16px/1.5 'Onest',system-ui,sans-serif}
+body.v-curator{--view-bg:var(--cu-bg);color:var(--cu-ink);font:15px/1.5 'Manrope',system-ui,sans-serif}
+/* public polish */
+.pu .card{transition:transform .15s,box-shadow .15s}.pu .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(18,33,61,.08)}
+.pu .facts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}.pu .facts span{border:1.5px dashed var(--line);border-radius:8px;padding:4px 10px;font-size:.88rem;color:var(--ink-2);background:var(--card)}
+.pu .two{display:grid;gap:14px;grid-template-columns:1fr 1fr}@media(max-width:760px){.pu .two{grid-template-columns:1fr}}
+/* cabinet */
+.cb{max-width:880px;margin:0 auto;padding-block:36px 60px;display:grid;gap:22px}
+.cb .top{display:flex;align-items:center;gap:12px}.cb .brand{font-weight:800;font-size:1.2rem;margin-right:auto}
+.cb h1{font-size:clamp(1.7rem,5vw,2.4rem);font-weight:800;letter-spacing:-.02em}
+.cb .lead{color:var(--ink-2)}
+.cb .roles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.cb .role{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:20px;cursor:pointer;display:grid;gap:6px;transition:transform .15s,border-color .15s}
+.cb .role:hover{transform:translateY(-3px);border-color:var(--pen)}.cb .role .e{font-size:2rem}.cb .role b{font-size:1.2rem}.cb .role span.d{color:var(--ink-2);font-size:.92rem}
+.cb .login{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:14px;max-width:440px}
+.cb .fl{display:flex;flex-direction:column;gap:4px}.cb .fl span{font-weight:600;font-size:.9rem}
+.cb input{padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);width:100%;min-width:0}
+.cb .err{color:var(--red);font-weight:600;min-height:1.4em}.cb .safe{font-size:.85rem;color:var(--ink-2)}
+/* curator */
+.cu .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--cu-bg);border-bottom:1px solid var(--cu-line)}
+.cu .hdr .wrap{display:flex;gap:10px;align-items:center;padding-block:10px;flex-wrap:wrap}
+.cu .brand{font-weight:800;color:var(--cu-acc);margin-right:auto}.cu .brand small{display:block;color:var(--cu-mute);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.cu .tabs{display:flex;gap:6px;overflow-x:auto;padding-block:10px}.cu .tabs button{background:var(--cu-card);border:1px solid var(--cu-line);border-radius:10px;padding:7px 14px;cursor:pointer;font-weight:700;color:var(--cu-mute);white-space:nowrap}
+.cu .tabs button[aria-current="page"]{background:var(--cu-acc);color:var(--cu-on);border-color:var(--cu-acc)}
+.cu .page{padding-block:8px 70px;display:grid;gap:16px}
+.cu h1{font-size:1.4rem;font-weight:800}.cu h2{font-size:1rem;font-weight:800;margin-bottom:8px}
+.cu .card{background:var(--cu-card);border:1px solid var(--cu-line);border-radius:14px;padding:16px;min-width:0}
+.cu .cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.cu .mute{color:var(--cu-mute)}
+.cu .cb2{background:var(--cu-acc);color:var(--cu-on);border:0;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer}
+.cu .cb2.ghost{background:transparent;color:var(--cu-acc);border:1.5px solid var(--cu-acc)}.cu .cb2.sm{padding:4px 10px;font-size:.85rem}
+.cu .cb2.bad{background:transparent;color:#C2362F;border:1.5px solid #C2362F}.cu .cb2.bad.arm{background:#C2362F;color:#fff}
+.cu .tag{display:inline-block;padding:2px 9px;border-radius:999px;background:var(--cu-soft);color:var(--cu-acc);font-weight:700;font-size:.78rem}
+.cu .frm{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:end}
+.cu .fl{display:flex;flex-direction:column;gap:3px;min-width:0}.cu .fl span{font-size:.8rem;font-weight:700;color:var(--cu-mute)}
+.cu input,.cu select,.cu textarea{padding:8px 10px;border:1px solid var(--cu-line);border-radius:9px;background:var(--cu-bg);width:100%;min-width:0}
+.cu textarea{min-height:70px;resize:vertical}
+.cu table{border-collapse:collapse;width:100%;min-width:480px}.cu th{text-align:left;font-size:.75rem;color:var(--cu-mute);padding:6px 8px;border-bottom:1px solid var(--cu-line);text-transform:uppercase;letter-spacing:.05em}.cu td{padding:8px;border-bottom:1px solid var(--cu-line)}
+.cu .tw{overflow-x:auto}
+.cu .kv{display:flex;gap:16px;flex-wrap:wrap;color:var(--cu-mute);font-size:.88rem;margin:6px 0 10px}
+/* shared */
+.msg{background:var(--pen-soft);border-left:4px solid var(--pen);padding:10px 14px;border-radius:8px;margin-bottom:14px;color:var(--ink);overflow-wrap:anywhere}
+.ad .cred{border:1.5px solid var(--ad-acc);background:var(--ad-panel);border-radius:6px;padding:12px 14px;margin-bottom:16px}
+.ad .cred code{font-family:'IBM Plex Mono',monospace;background:var(--ad-panel2);padding:2px 8px;border-radius:4px;user-select:all}
+.ad .topbar{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-bottom:12px;color:var(--ad-mute);flex-wrap:wrap}
+.ad .grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.st .xp{display:flex;gap:10px;align-items:center}.st .lvl{width:54px;height:54px;border-radius:18px;background:var(--st-yel);color:#2A1B3D;display:grid;place-items:center;font-family:'Unbounded',sans-serif;font-weight:700;flex:none}
+.st .warn{background:var(--st-soft);border-radius:14px;padding:10px 12px;font-weight:700}
+
+.thumb{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--ad-panel2,#ddd);display:grid;place-items:center;font-size:.75rem;font-weight:600;flex:none}
+img.ava{object-fit:cover;display:block}
+.cu .cuava{width:48px;height:48px;border-radius:50%;object-fit:cover;background:var(--cu-soft);color:var(--cu-acc);display:grid;place-items:center;font-weight:800}
+.fl.ck{flex-direction:row;align-items:center;gap:8px}.fl.ck input{width:auto}
+.ad select{padding:5px 8px;border:1px solid var(--ad-line);border-radius:5px;background:var(--ad-bg)}
+.ad .main input[type=file],.cu input[type=file],.st input[type=file]{padding:4px;font-size:.85rem}
+.st textarea{padding:9px 11px;border:2px solid var(--st-line);border-radius:12px;background:var(--st-bg);width:100%;min-width:0;min-height:80px;resize:vertical}
+.cb .login input{width:100%}
+.ev{overflow:hidden;min-width:0}.ev .banner{display:block;width:100%;aspect-ratio:16/7;max-height:210px;object-fit:cover}
+.ev .evb{padding:14px;display:grid;gap:6px}.ev h3{font-size:1.05rem}.ev p{margin:0}
+.evt{font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.evg{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.pu .evs{padding-block:18px 0}.pu .evsh{font-family:'Caveat',cursive;font-size:1.6rem;color:var(--pen);font-weight:700;margin-bottom:6px}
+.pu .ev{background:var(--card);border:1.5px solid var(--line);border-radius:14px}.pu .evt{color:var(--pen)}.pu .ev p{color:var(--ink-2);font-size:.95rem}.pu .evl{color:var(--pen);font-weight:600}
+.st .ev{background:var(--st-card);border:2px solid var(--st-line);border-radius:22px}.st .evt{color:var(--st-acc)}.st .evl{color:var(--st-acc2);font-weight:800}
+.st .tiles{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}@media(max-width:480px){.st .tiles{grid-template-columns:1fr}}
+.st .tile{display:grid;gap:2px}.st .tile b{font-family:'Unbounded',sans-serif;font-size:1.3rem}
+.st .spk{color:var(--st-acc2);display:block;margin-block:6px}
+.st .badges{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.st .badge2{display:grid;gap:4px;justify-items:center;text-align:center;background:var(--st-soft);border-radius:16px;padding:12px 8px}.st .badge2 span{font-size:1.6rem}.st .badge2 b{font-size:.82rem}
+.st .badge2.off{opacity:.4;filter:grayscale(1)}
+</style>
+<div id="app"></div>
+<script>
+(function(){
+'use strict';
+/* ================= helpers ================= */
+/* ===== i18n: русский / қазақша ===== */
+var LANG=(function(){try{return localStorage.getItem('peerup-lang')||'ru'}catch(e){return 'ru'}})();
+var KK={
+'Пробный урок':'Сынақ сабақ','за урок':'сабақ үшін','1 занятие 60 минут':'1 сабақ, 60 минут','Зачтём в подписку, если останетесь':'Қалсаңыз, жазылымға есептейміз','Группа · 4 занятия':'Топ · 4 сабақ','Группа · 8 занятий':'Топ · 8 сабақ','ЕНТ-комплекс · группа':'ҰБТ-кешен · топ','2 занятия в неделю':'аптасына 2 сабақ','3 предмета по 4 занятия':'3 пән, әрқайсысында 4 сабақ','Пробники ЕНТ в кабинете':'Кабинетте ҰБТ сынақтары','Индивидуально · 4 занятия':'Жеке · 4 сабақ','Индивидуально · 8 занятий':'Жеке · 8 сабақ','ЕНТ-интенсив · индивидуально':'ҰБТ-интенсив · жеке','12 занятий, 3 в неделю':'12 сабақ, аптасына 3','Пробники ЕНТ и план подготовки':'ҰБТ сынақтары және дайындық жоспары','IELTS · индивидуально':'IELTS · жеке','Speaking и Writing с разбором':'Speaking және Writing талдаумен',
+'Объясняют те, кто сам недавно это сдал':'Жақында өзі тапсырғандар түсіндіреді','сам недавно это сдал':'өзі тапсырғандар',
+'Занятия онлайн со старшими, которые недавно сами сдавали эти экзамены. Ребёнку легко задать любой вопрос, а вам легко следить за прогрессом.':'Жақында осы емтихандарды өздері тапсырған үлкен жолдастармен онлайн сабақ. Балаға кез келген сұрақ қою оңай, ал сізге үлгерімін қадағалау оңай.',
+'Английский и IELTS':'Ағылшын тілі және IELTS','Подготовка к ЕНТ':'ҰБТ-ға дайындық','Пробник ЕНТ':'ҰБТ сынағы','=Математика':'Математика','=Физика':'Физика',
+'Выберите предмет':'Пәнді таңдаңыз','Подберём консультанта по предмету и уровню ребёнка.':'Баланың пәні мен деңгейіне қарай консультант таңдаймыз.',
+'Получите доступ':'Қолжетімділік алыңыз','Мы создаём личный кабинет ученика и передаём логин и пароль.':'Біз оқушының жеке кабинетін ашып, логин мен құпиясөзді береміз.',
+'Занимайтесь онлайн':'Онлайн оқыңыз','60 минут: повторение, объяснение на примерах, практика с разбором ошибок.':'60 минут: қайталау, мысалмен түсіндіру, қателермен жұмыс жасап жаттығу.',
+'Следите за прогрессом':'Үлгерімді қадағалаңыз','Куратор следит за заданиями и результатами. Раз в месяц короткий отчёт.':'Куратор тапсырмалар мен нәтижелерді бақылайды. Айына бір рет қысқаша есеп.',
+'Данные ребёнка под защитой':'Баланың деректері қорғалған','Доступ к кабинету только по личному логину и паролю, которые выдаёт администратор.':'Кабинетке тек әкімші берген жеке логин мен құпиясөз арқылы кіруге болады.',
+'Куратор рядом':'Куратор жанында','За каждым учеником закреплён куратор 18+, он видит только своих учеников.':'Әр оқушыға 18+ куратор бекітіледі, ол тек өз оқушыларын көреді.',
+'Общение только на платформе':'Байланыс тек платформада','Консультанты не переписываются с детьми в личных мессенджерах.':'Консультанттар балалармен жеке мессенджерлерде жазыспайды.',
+'Жалобы за 24 часа':'Шағым 24 сағатта қаралады','Консультанта отстраняем на время проверки и сообщаем результат.':'Тексеру кезінде консультантты уақытша шеттетіп, нәтижесін хабарлаймыз.',
+'Как проходят занятия?':'Сабақ қалай өтеді?','Онлайн, по 60 минут. Расписание согласуем с вами.':'Онлайн, әрқайсысы 60 минут. Кестені сізбен келісеміз.',
+'Как попасть в личный кабинет?':'Жеке кабинетке қалай кіруге болады?','Доступ выдаёт администратор после записи на пробный урок: логин и пароль для ученика.':'Сынақ сабаққа жазылғаннан кейін әкімші оқушыға логин мен құпиясөз береді.',
+'Как оплатить?':'Қалай төлеуге болады?','Раз в месяц через Kaspi. Реквизиты отправим после записи.':'Айына бір рет Kaspi арқылы. Деректемелерді жазылғаннан кейін жібереміз.',
+'Что если консультант не подойдёт?':'Консультант сәйкес келмесе ше?','Напишите нам, и мы подберём другого.':'Бізге жазыңыз, басқасын таңдап береміз.',
+'Вы гарантируете балл на экзамене?':'Емтиханда балл кепілдік бересіздер ме?','Нет, конкретный балл мы не обещаем. Мы строим план подготовки и показываем динамику по тестам.':'Жоқ, нақты балл уәде етпейміз. Дайындық жоспарын құрып, тест бойынша динамиканы көрсетеміз.',
+'Направления':'Бағыттар','=Консультанты':'Консультанттар','Стоимость':'Бағасы','=Вопросы':'Сұрақтар','=Контакты':'Байланыс','Личный кабинет':'Жеке кабинет','Peer-to-Peer обучение':'Peer-to-Peer оқыту','=Онлайн':'Онлайн','=60 минут':'60 минут','Отчёт раз в месяц':'Айлық есеп',
+'Записаться на пробный урок':'Сынақ сабаққа жазылу','Как это работает':'Бұл қалай жұмыс істейді','Консультантов: ':'Консультанттар: ','Наши консультанты':'Біздің консультанттар',
+'Сильные студенты и выпускники. Каждый прошёл отбор, а занятия идут на платформе проекта.':'Мықты студенттер мен түлектер. Әрқайсысы іріктеуден өткен, сабақтар жоба платформасында өтеді.',
+'=Все':'Барлығы','По этому направлению пока нет опубликованных консультантов.':'Бұл бағыт бойынша жарияланған консультант әлі жоқ.','Безопасность детей':'Балалардың қауіпсіздігі',
+'Оплата раз в месяц. Начинаем с пробного урока.':'Төлем айына бір рет. Сынақ сабақтан бастаймыз.','Выгоднее':'Тиімдірек','=Группа':'Топ','в месяц за ученика':'айына бір оқушы үшін','До 5 человек':'5 адамға дейін',
+'4 занятия по 60 минут':'60 минуттан 4 сабақ','Ежемесячный отчёт родителю':'Ата-анаға айлық есеп','=Выбрать':'Таңдау','=Индивидуально':'Жеке','=в месяц':'айына','Только ваш ребёнок':'Тек сіздің балаңыз','График под вашу семью':'Отбасыңызға лайық кесте',
+'=Отзывы':'Пікірлер','Частые вопросы':'Жиі қойылатын сұрақтар','Запишитесь на пробный урок':'Сынақ сабаққа жазылыңыз',
+'Напишите нам, и мы подберём консультанта по предмету и классу. Доступ в личный кабинет вы получите после записи.':'Бізге жазыңыз, пән мен сыныпқа қарай консультант таңдаймыз. Жеке кабинетке жазылғаннан кейін кіресіз.',
+'Написать в Telegram':'Telegram-ға жазу','Контакты скоро появятся.':'Байланыс жақында пайда болады.','Уже есть логин? Войти':'Логин бар ма? Кіру',' · Онлайн · Казахстан':' · Онлайн · Қазақстан','Платформа Peer-to-Peer обучения':'Peer-to-Peer оқыту платформасы',
+'=Ученик':'Оқушы','Занятия, задания, прогресс':'Сабақ, тапсырма, үлгерім','Дети, оплата, правила':'Балалар, төлем, ережелер','=Консультант':'Консультант','Расписание, слоты, заработок':'Кесте, уақыт, табыс','=Куратор':'Куратор',
+'Мои ученики, расписание, результаты':'Оқушыларым, кесте, нәтижелер','=Администратор':'Әкімші','Управление всей платформой':'Бүкіл платформаны басқару','=Родитель':'Ата-ана',
+'← На сайт':'← Сайтқа','Выберите, кто вы. Логин и пароль выдаёт администратор.':'Кім екеніңізді таңдаңыз. Логин мен құпиясөзді әкімші береді.','=Войти':'Кіру','Слишком много попыток. Подождите ':'Тым көп әрекет. Күте тұрыңыз: ',' сек.':' сек.',
+'Проверяю…':'Тексеріп жатырмын…','Неверный логин или пароль':'Логин немесе құпиясөз қате','Вход недоступен в этом окне':'Бұл терезеде кіру мүмкін емес','=Пароль':'Құпиясөз','Другая роль':'Басқа рөл',
+'Пароль не хранится в открытом виде. Забыли пароль? Попросите администратора выдать новый.':'Құпиясөз ашық түрде сақталмайды. Ұмытып қалдыңыз ба? Әкімшіден жаңасын сұраңыз.','=Вход':'Кіру','Пока пусто.':'Әзірге бос.','=Выйти':'Шығу',
+'Мои ученики':'Оқушыларым','=Расписание':'Кесте','=Задания':'Тапсырмалар','=Результаты':'Нәтижелер','=Отзыв':'Пікір','кабинет куратора · ':'куратор кабинеті · ','Пока нет учеников':'Әзірге оқушы жоқ',
+'Администратор закрепит за вами учеников, и они появятся здесь.':'Әкімші сізге оқушыларды бекітеді, олар осында көрінеді.','Комментарий, который увидит ученик':'Оқушы көретін пікір',' класс':' сынып','Следующее: ':'Келесі: ','=нет':'жоқ',
+'Открытых заданий: ':'Ашық тапсырмалар: ','Последний тест: ':'Соңғы тест: ','Подписка до ':'Жазылым мерзімі: ','Подписка не активна':'Жазылым белсенді емес','Заметка для ученика':'Оқушыға жазба','Заметка сохранена':'Жазба сақталды',
+'=Сохранить':'Сақтау','Занятия моих учеников':'Оқушыларымның сабақтары','=Когда':'Қашан','=Предмет':'Пән','=Статус':'Мәртебе','Новое задание':'Жаңа тапсырма','=Задание':'Тапсырма','=Срок':'Мерзімі','=Выдать':'Беру','=Выданные':'Берілген',
+'=сдано':'тапсырылды','=в работе':'орындалуда','=Удалить':'Жою','Записать результат':'Нәтиже жазу','Название теста':'Тест атауы','=Баллов':'Балл','=Из':'Ең көбі','=Записать':'Жазу','Баллов не может быть больше максимума':'Балл максимумнан көп болуы мүмкін емес','=Дата':'Күні','=Баллы':'Балл',
+'=Главная':'Басты бет','=ДЗ':'Үй тапсырмасы','=Занятия':'Сабақтар','=Прогресс':'Үлгерім','=Пробник':'Сынақ','=Избранное':'Таңдаулы','=Уведомления':'Хабарламалар','=Разделы':'Бөлімдер','Войти в урок':'Сабаққа кіру',
+'Привет, ':'Сәлем, ','Уровень ':'Деңгей ','Ещё ':'Тағы ',' очков до следующего. Занятие +10, задание +5':' ұпай келесіге дейін. Сабақ +10, тапсырма +5','От куратора':'Куратордан',
+'Подписка не активна. Чтобы записываться на занятия, напишите администратору.':'Жазылым белсенді емес. Сабаққа жазылу үшін әкімшіге жазыңыз.','Ближайшее занятие':'Жақын сабақ',' в ':' · ','Занятий пока нет':'Сабақ әлі жоқ',
+'Выбери консультанта и запишись.':'Консультант таңдап, жазыл.','Открыть каталог':'Каталогты ашу','Домашние задания':'Үй тапсырмалары',' · до ':' · дейін ','Всё сдано 🎉':'Бәрі тапсырылды 🎉','Последний результат':'Соңғы нәтиже',' из ':' / ',
+'Отзыв о PeerUp':'PeerUp туралы пікір','Поделись, как проходят занятия. Отзыв проверит администратор.':'Сабақтар қалай өтіп жатқанын бөліс. Пікірді әкімші тексереді.','Оставить отзыв':'Пікір қалдыру','В избранное':'Таңдаулыға',
+'Свободные дни: ':'Бос күндер: ','Пока нет свободных слотов':'Бос уақыт әлі жоқ','=Записаться':'Жазылу','Нужна активная подписка':'Белсенді жазылым қажет','нет свободного времени':'бос уақыт жоқ',
+'В этот день нет свободных слотов. Выбери другую дату.':'Бұл күні бос уақыт жоқ. Басқа күнді таңда.','Дата должна быть в пределах подписки (до ':'Күн жазылым мерзімінде болуы керек (дейін ','Это время уже занято. Выбери другое.':'Бұл уақыт бос емес. Басқасын таңда.',
+'Ты записан(а) на занятие':'Сен сабаққа жазылдың','Свободное время':'Бос уақыт','Никого не нашли. Попробуй другой предмет.':'Ешкім табылмады. Басқа пәнді көр.','Поиск по имени':'Аты бойынша іздеу','Предстоящие':'Алдағы','Пока нет записей.':'Жазба әлі жоқ.',
+'=История':'Тарих','Проведённых занятий ещё нет.':'Өткен сабақ әлі жоқ.','Заданий нет.':'Тапсырма жоқ.','Первое занятие':'Алғашқы сабақ','5 занятий':'5 сабақ','5 заданий сдано':'5 тапсырма тапсырылды','Тест на 80%+':'Тест 80%+','Рост на 10%+':'10%+ өсім',
+'Есть любимый консультант':'Сүйікті консультант бар','Мой прогресс':'Менің үлгерімім','=Занятий':'Сабақ','Заданий сдано':'Тапсырылған тапсырма','Средний результат':'Орташа нәтиже','На что обратить внимание':'Неге назар аудару керек',
+'Самый низкий последний результат: ':'Ең төмен соңғы нәтиже: ','%). Обсуди с куратором, что повторить.':'%). Нені қайталау керегін куратормен талқыла.','Цель по предмету':'Пән бойынша мақсат','Без цели':'Мақсатсыз','Цель ':'Мақсат ',
+'Результатов по предмету пока нет.':'Бұл пән бойынша нәтиже әлі жоқ.','Цель достигнута 🎉':'Мақсатқа жеттің 🎉','До цели осталось ':'Мақсатқа дейін қалды ',
+'Результаты тестов появятся, когда куратор запишет первый. Цель по предмету можно поставить и сейчас после первого теста.':'Куратор алғашқы нәтижені жазғанда тест нәтижелері пайда болады. Мақсатты алғашқы тесттен кейін қоюға болады.',
+'Достижения':'Жетістіктер','Отмечай консультантов звёздочкой в каталоге.':'Каталогта консультанттарды жұлдызшамен белгіле.','Скоро занятие: ':'Жақында сабақ: ','Скоро срок: ':'Мерзімі жақын: ','Пока тихо.':'Әзірге тыныш.','=События':'Оқиғалар','=Поддержка':'Қолдау',
+'Контакт поддержки появится, когда его добавят в админке.':'Қолдау байланысы әкімші қосқанда пайда болады.','=Вс':'Жс','=Пн':'Дс','=Вт':'Сс','=Чт':'Бс','=Пт':'Жм','=Сб':'Сн',
+'Подойдёт фото JPG, PNG или WebP':'JPG, PNG немесе WebP фото қолайлы','Файл больше 8 МБ':'Файл 8 МБ-тан үлкен','Не удалось прочитать файл':'Файлды оқу мүмкін болмады','Не удалось открыть фото':'Фотоны ашу мүмкін болмады','Загрузить фото':'Фото жүктеу','Загружаю…':'Жүктеп жатырмын…','Убрать фото':'Фотоны жою',
+'=январь':'қаңтар','=февраль':'ақпан','=март':'наурыз','=апрель':'сәуір','=май':'мамыр','=июнь':'маусым','=июль':'шілде','=август':'тамыз','=сентябрь':'қыркүйек','=октябрь':'қазан','=ноябрь':'қараша','=декабрь':'желтоқсан',
+'Статус занятия':'Сабақ мәртебесі','=Запланировано':'Жоспарланған','=Проведено':'Өткізілді','=Не проведено':'Өтпеді','=Отменено':'Бас тартылды','=Причина':'Себебі','Не вышел консультант':'Консультант келмеді','Не пришёл ученик':'Оқушы келмеді','Другая причина':'Басқа себеп','Ближайшие события':'Жақын оқиғалар',
+'Как проходят занятия? Что нравится, что улучшить?':'Сабақ қалай өтеді? Не ұнайды, нені жақсарту керек?','Сначала отзыв проверит администратор.':'Алдымен пікірді әкімші тексереді.','Спасибо! Отзыв отправлен на модерацию':'Рақмет! Пікір модерацияға жіберілді','Твой отзыв':'Сенің пікірің',
+'Фото (необязательно, иначе возьмём фото из профиля)':'Фото (міндетті емес, әйтпесе профильдегі фото алынады)','Согласен(а) на публикацию отзыва на сайте с моим именем и фото (для детей нужно согласие родителя)':'Пікірімнің атыммен және фотоммен сайтта жариялануына келісемін (балалар үшін ата-ананың келісімі қажет)',
+'Отправить на модерацию':'Модерацияға жіберу','на модерации':'модерацияда','=опубликован':'жарияланды','=отклонён':'қабылданбады','Расскажите, как работает проект. Отзыв сначала проверит администратор.':'Жоба қалай жұмыс істейтінін айтыңыз. Пікірді алдымен әкімші тексереді.',
+'Моё фото (видно администратору и в отзывах):':'Менің фотом (әкімшіге және пікірлерде көрінеді):','Мой профиль':'Менің профилім','Моё фото:':'Менің фотом:','Мои данные':'Менің деректерім','пока не назначен':'әлі тағайындалмаған','Динамика результатов':'Нәтижелер динамикасы',
+'=Отменить':'Бас тарту','Занятие отменено бесплатно.':'Сабақ тегін бас тартылды.','Отмена позже чем за ':'Мерзімінен кеш бас тарту: ',' ч: по правилам занятие считается неявкой.':' сағат: ережеге сәйкес сабақ келмеу болып саналады.',
+'=Дети':'Балалар','=Оплата':'Төлем','Правила и контакты':'Ережелер мен байланыс','кабинет родителя · ':'ата-ана кабинеті · ','Пока нет детей':'Әзірге бала жоқ','Администратор привяжет ребёнка к вашему кабинету.':'Әкімші баланы кабинетіңізге байланыстырады.','не назначен':'тағайындалмаған',
+'Заданий в работе: ':'Орындалып жатқан тапсырма: ','Ближайшие занятия':'Жақын сабақтар','=Урок':'Сабақ','Нет запланированных.':'Жоспарланған жоқ.','=Балл':'Балл','Результатов пока нет.':'Нәтиже әлі жоқ.','=Подписка':'Жазылым','оплачено до ':'төленген, мерзімі ','не оплачено':'төленбеген',
+'Групповое ':'Топтық ',', индивидуальное ':', жеке ','. Оплата переводом, реквизиты и подтверждение выдаёт администратор.':'. Төлем аударым арқылы, деректемелер мен растауды әкімші береді.','История оплат':'Төлем тарихы','=Ребёнок':'Бала','=Сумма':'Сома','=Способ':'Тәсіл','Оплат пока нет.':'Төлем әлі жоқ.',
+'Отмена и возврат':'Бас тарту және қайтару','Бесплатная отмена: не позднее чем за ':'Тегін бас тарту: ең кеші ',' ч до начала.':' сағат бұрын.','Публичная оферта':'Жария оферта','Контакты для напоминаний':'Еске салу байланыстары',
+'Напоминания о занятиях отправляет администратор в Telegram или WhatsApp.':'Сабақ туралы еске салуды әкімші Telegram немесе WhatsApp арқылы жібереді.','Telegram (@имя)':'Telegram (@аты)','WhatsApp (номер)':'WhatsApp (нөмір)','=Сохранено':'Сақталды',
+'Отмена занятия в срок бесплатна. Позже занятие считается неявкой ученика. Если занятие не провёл консультант, его переносят или возвращают оплату за него. Неиспользованную часть подписки можно вернуть по заявлению в течение 7 дней.':'Мерзімінде бас тарту тегін. Кеш бас тартылған сабақ оқушының келмеуі болып саналады. Сабақты консультант өткізбесе, ол басқа күнге ауыстырылады немесе төлемі қайтарылады. Жазылымның пайдаланылмаған бөлігін 7 күн ішінде өтініш бойынша қайтаруға болады.',
+'ШАБЛОН, проверьте у юриста до запуска.':'ҮЛГІ: іске қосар алдында заңгерге тексертіңіз.','Исполнитель оказывает услуги онлайн-занятий, Заказчик (родитель) оплачивает подписку. Стоимость и состав услуг указаны на сайте.':'Орындаушы онлайн сабақ қызметін көрсетеді, Тапсырыс беруші (ата-ана) жазылымға төлейді. Қызмет құны мен құрамы сайтта көрсетілген.',
+'Заказчик вправе отменить занятие по правилам отмены и возврата. Персональные данные используются только для проведения занятий и связи с Заказчиком.':'Тапсырыс беруші сабақтан бас тарту және қайтару ережесіне сай бас тарта алады. Жеке деректер тек сабақ өткізу және Тапсырыс берушімен байланыс үшін қолданылады.',
+'=Слоты':'Уақыт','=Заработок':'Табыс','Профиль и урок':'Профиль және сабақ','кабинет консультанта · ':'консультант кабинеті · ','Мои занятия':'Менің сабақтарым','Занятий пока нет.':'Сабақ әлі жоқ.','Мои свободные слоты':'Менің бос уақытым',
+'Отметьте часы, когда готовы вести занятия каждую неделю. Ученики записываются только на отмеченные.':'Әр апта сайын сабақ өткізуге дайын сағаттарыңызды белгілеңіз. Оқушылар тек белгіленген уақытқа жазылады.','Ставка ':'Мөлшерлеме ',' за проведённое занятие. Выплата ':' өткізілген сабақ үшін. Төлем ',
+'=еженедельно':'апта сайын','=ежемесячно':'ай сайын','. Запланировано: ':'. Жоспарланған: ','=Период':'Кезең','=Выплата':'Төлем','=ожидает':'күтуде','Занятия за месяц':'Айдағы сабақтар','Оплачиваемых занятий пока нет.':'Төленетін сабақ әлі жоқ.','Ссылка на урок':'Сабақ сілтемесі',
+'Любая ссылка https (Google Meet, Zoom, Jitsi). Если пусто, комната Jitsi создаётся автоматически. Запись урока включайте в самой видеосвязи.':'Кез келген https сілтеме (Google Meet, Zoom, Jitsi). Бос болса, Jitsi бөлмесі автоматты түрде жасалады. Сабақ жазбасын видеобайланыстың өзінде қосыңыз.',
+'=Ссылка':'Сілтеме','Нужна ссылка, начинающаяся с https://':'https:// деп басталатын сілтеме қажет','О себе':'Өзім туралы','=Описание':'Сипаттама','До 10 вопросов из банка. Результат сам попадёт в «Прогресс».':'Банктен 10 сұраққа дейін. Нәтиже өздігінен «Үлгерімге» түседі.',
+'Банк вопросов пока пуст.':'Сұрақ банкі әзірге бос.','Пробник · ':'Сынақ · ','Результат: ':'Нәтиже: ','=Завершить':'Аяқтау','Новый пробник':'Жаңа сынақ','Напоминание PeerUp: ':'PeerUp еске салуы: ','. Урок: ':'. Сабақ: ','нет занятий':'сабақ жоқ',
+'Telegram (текст скопируется)':'Telegram (мәтін көшіріледі)','нет контакта':'байланыс жоқ','← Назад':'← Артқа','Бесплатная отмена не позднее чем за ':'Тегін бас тарту: ең кеші ',' ч до начала занятия.':' сағат бұрын.','Публичная оферта и правила отмены':'Жария оферта және бас тарту ережесі','Точно?':'Расымен бе?'
+};
+var KX={},KS=[],TC={};
+Object.keys(KK).forEach(function(k){if(k[0]==='='){KX[k.slice(1)]=KK[k]}else{KX[k]=KK[k];if(k.length>=4||(k[0]===' '&&k.slice(-1)===' '))KS.push(k)}});
+KS.sort(function(a,b){return b.length-a.length});
+function tr(s){if(LANG!=='kk'||!s)return s;if(TC[s]!=null)return TC[s];var r=KX[s];if(r==null){r=s;for(var i=0;i<KS.length;i++){var k=KS[i];if(r.indexOf(k)>=0)r=r.split(k).join(KX[k])}}return TC[s]=r}
+(function(){var d=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');if(d&&d.set)Object.defineProperty(Node.prototype,'textContent',{get:d.get,configurable:true,set:function(v){d.set.call(this,typeof v==='string'?tr(v):v)}})})();
+var MATH=['x² − 5x + 6 = 0','D = 25 − 24 = 1','x₁ = 3,   x₂ = 2'];
+var NOTES={ru:[['Тетрадь по математике',['№ 214. Решите уравнение'].concat(MATH),'Верно! Проверь по Виету: 3 + 2 = 5, 3 · 2 = 6'],['Тетрадь по физике',['№ 7. Найдите скорость','v = s / t','v = 120 / 20','v = 6 м/с'],'Верно! Единицы: м/с'],['Тетрадь по английскому',['Task 3. Past Simple','She (buy) a book.','She bought a book.','buy → bought'],'Отлично! Неправильный глагол']],
+kk:[['Математика дәптері',['№ 214. Теңдеуді шеш'].concat(MATH),'Дұрыс! Виет бойынша тексер: 3 + 2 = 5, 3 · 2 = 6'],['Физика дәптері',['№ 7. Жылдамдықты тап','v = s / t','v = 120 / 20','v = 6 м/с'],'Дұрыс! Өлшем бірлігі: м/с'],['Ағылшын тілі дәптері',['Task 3. Past Simple','She (buy) a book.','She bought a book.','buy → bought'],'Керемет! Ауыспалы етістік']]};
+function noteEl(){var n=NOTES[LANG==='kk'?'kk':'ru'][(ui.noteIdx||0)%3];
+  return h('div',{class:'note','aria-hidden':'true',style:'cursor:pointer',onclick:function(){ui.noteIdx=(ui.noteIdx||0)+1;render(true)}},h('small',{},n[0]),n[1].map(function(l){return h('div',{class:'ln'},l)}),h('div',{class:'rv'},n[2]),h('div',{class:'gr'},'5'))}
+function setLang(l){LANG=l;try{localStorage.setItem('peerup-lang',l)}catch(e){}document.documentElement.lang=l;langBox();render(true)}
+function langBox(){var b=document.getElementById('langbox');if(!b){b=document.createElement('div');b.id='langbox';b.style.cssText='position:fixed;right:10px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;border:1.5px solid #888;border-radius:999px;overflow:hidden;background:#fff;font:600 13px system-ui,sans-serif';document.body.append(b)}
+  b.replaceChildren.apply(b,['ru','kk'].map(function(l){var x=h('button',{type:'button','aria-pressed':String(LANG===l),style:'border:0;padding:7px 11px;cursor:pointer;color:#000;background:'+(LANG===l?'#FFC93C':'transparent')},l==='ru'?'RU':'ҚАЗ');x.addEventListener('click',function(){setLang(l)});return x}))}
+
+function add(e,k){for(var x of k.flat(9)){if(x==null||x===false)continue;e.append(x&&x.nodeType?x:document.createTextNode(tr(String(x))))}}
+function h(tag,a){var e=document.createElement(tag),k=[].slice.call(arguments,2);
+  for(var n in (a||{})){var v=a[n];if(v==null||v===false)continue;
+    if(n==='class')e.className=v;else if(n.slice(0,2)==='on')e.addEventListener(n.slice(2),v);else e.setAttribute(n,v===true?'':(n==='placeholder'||n==='aria-label'||n==='title'?tr(String(v)):v))}
+  add(e,k);return e}
+function S(x){return x==null?'':String(x)}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function by(list,id){for(var i=0;i<list.length;i++)if(list[i].id===id)return list[i]}
+function money(n){return Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ')+' ₸'}
+function dstr(off){var d=new Date();d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10)}
+function fdate(s){var p=S(s).split('-');return p.length===3?p[2]+'.'+p[1]:'—'}
+function scrollToId(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+function safeHandle(v){return S(v).replace(/^https?:\/\/[^/]+\//,'').replace(/^@/,'').replace(/[^A-Za-z0-9_.]/g,'')}
+function initials(n){return S(n).split(/\s+/).slice(0,2).map(function(w){return w[0]||''}).join('').toUpperCase()}
+function twoStep(label,fn,cls){var armed=false,t=0;var b=h('button',{type:'button',class:cls});b.textContent=label;
+  b.addEventListener('click',function(){if(!armed){armed=true;b.classList.add('arm');b.textContent='Точно?';t=setTimeout(function(){armed=false;b.classList.remove('arm');b.textContent=label},3000)}else{clearTimeout(t);fn()}});return b}
+
+/* ================= безопасность: пароли =================
+   Пароли нигде не хранятся в открытом виде: только соль + PBKDF2-SHA256 (210 000 итераций).
+   ВАЖНО: это прототип без сервера. Он защищает от «подглядывания» пароля в данных,
+   но не заменяет настоящую серверную авторизацию (см. план запуска). */
+var ITER=210000;
+function toHex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('')}
+function fromHex(s){var a=new Uint8Array(s.length/2);for(var i=0;i<a.length;i++)a[i]=parseInt(s.substr(i*2,2),16);return a}
+function pbkdf2(pw,saltHex){
+  var enc=new TextEncoder();
+  return crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']).then(function(k){
+    return crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:fromHex(saltHex),iterations:ITER},k,256)}).then(toHex);
+}
+function newSalt(){return toHex(crypto.getRandomValues(new Uint8Array(16)))}
+function genPassword(){var al='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789',r=crypto.getRandomValues(new Uint8Array(10)),o='';for(var i=0;i<10;i++)o+=al[r[i]%al.length];return o}
+function eqHex(a,b){if(a.length!==b.length)return false;var d=0;for(var i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
+var TR={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sh',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya',ә:'a',ғ:'g',қ:'k',ң:'n',ө:'o',ұ:'u',ү:'u',һ:'h',і:'i'};
+function slug(n){return S(n).toLowerCase().split('').map(function(c){return TR[c]!==undefined?TR[c]:c}).join('').replace(/[^a-z0-9]/g,'').slice(0,12)||'user'}
+function normLogin(l){return S(l).trim().toLowerCase()}
+function validLogin(l){return /^[a-z0-9_.-]{3,24}$/.test(l)}
+/* аккаунт администратора: логин и ХЭШ пароля (не сам пароль) */
+var ADMIN={login:'beksultankosturgan',salt:'016131156bb42f62c198868487782130',hash:'a7c9f098448225967303397b4fc883f2abdb25fc7a3ae9fe75f21dcd8577c1da'};
+
+/* ================= общая база (демо) =================
+   Одна база на все панели. В прототипе лежит в браузере (localStorage). */
+var KEY='peerup-demo-v2';
+function seed(){
+  var s1='math',s2='eng',s3='phys',s4='ent';
+  return {v:2,
+   settings:{priceGroup:12000,priceIndiv:22000,defaultRate:3000,telegram:'',brand:'PeerUp',consPeriod:'week',curPeriod:'month',taxPct:4,fixedCosts:0,payNoShow:false},payouts:[],
+   content:{heroTitle:'Объясняют те, кто сам недавно это сдал',heroMark:'сам недавно это сдал',
+     heroText:'Занятия онлайн со старшими, которые недавно сами сдавали эти экзамены. Ребёнку легко задать любой вопрос, а вам легко следить за прогрессом.'},
+   subjects:[{id:s1,name:'Математика'},{id:s2,name:'Английский и IELTS'},{id:s3,name:'Физика'},{id:s4,name:'Подготовка к ЕНТ'}],
+   consultants:[
+    {id:'c1',name:'Айдана К.',subs:[s1,s4],bio:'Демо-анкета. Здесь будут достижения: олимпиады, баллы, опыт.',rate:3000,published:true,status:'active'},
+    {id:'c2',name:'Данияр М.',subs:[s2],bio:'Демо-анкета. Здесь будет балл IELTS и стиль объяснения.',rate:3500,published:true,status:'active'},
+    {id:'c3',name:'Мадина Т.',subs:[s3,s1],bio:'Демо-анкета. Добавьте результаты и опыт.',rate:3000,published:false,status:'review'}],
+   curators:[{id:'k1',name:'Куратор Демо'}],
+   students:[{id:'s1',name:'Ученик Демо',grade:'9',parent:'Родитель Демо',contact:'',curatorId:'k1',paidUntil:dstr(20),note:''},
+             {id:'s2',name:'Ученица Демо',grade:'11',parent:'Родитель Демо 2',contact:'',curatorId:'k1',paidUntil:dstr(10),note:''}],
+   accounts:[],audit:[],
+   sessions:[
+    {id:'x1',studentId:'s1',consultantId:'c1',subjectId:s1,date:dstr(1),time:'17:00',status:'planned'},
+    {id:'x2',studentId:'s1',consultantId:'c2',subjectId:s2,date:dstr(3),time:'18:30',status:'planned'},
+    {id:'x3',studentId:'s1',consultantId:'c1',subjectId:s1,date:dstr(-4),time:'17:00',status:'done'},
+    {id:'x4',studentId:'s2',consultantId:'c2',subjectId:s2,date:dstr(-2),time:'19:00',status:'done'}],
+   payments:[{id:'p1',studentId:'s1',amount:20000,date:dstr(-5)},{id:'p2',studentId:'s2',amount:10000,date:dstr(-3)}],
+   reviews:[{id:'r1',author:'Демо-отзыв (для проверки модерации)',text:'Это пример отзыва, он ждёт модерации в админке.',status:'pending'}],
+   homework:[{id:'h1',studentId:'s1',title:'Квадратные уравнения: №210–214',due:dstr(2),done:false},
+             {id:'h2',studentId:'s1',title:'Эссе: My future university (150 слов)',due:dstr(5),done:false}],
+   tests:[{id:'t1',studentId:'s1',subjectId:s1,title:'Входная диагностика',score:12,max:25,date:dstr(-10)},
+          {id:'t2',studentId:'s1',subjectId:s1,title:'Контрольная 1',score:17,max:25,date:dstr(-3)}],
+   events:[{id:'e1',title:'Эфир: как готовиться к IELTS',date:dstr(6),type:'Трансляция'}],
+   favs:{}};
+}
+function migrate(d){
+  var st=d.settings;if(st.consPeriod==null)st.consPeriod='week';if(st.curPeriod==null)st.curPeriod='month';if(st.taxPct==null)st.taxPct=4;if(st.fixedCosts==null)st.fixedCosts=0;if(st.payNoShow==null)st.payNoShow=false;
+  d.payouts=d.payouts||[];d.audit=d.audit||[];d.accounts=d.accounts||[];
+  d.consultants.forEach(function(c){if(!c.avail){c.avail=[];[1,2,3,4,5].forEach(function(w){['16:00','17:00','18:00'].forEach(function(t){c.avail.push({dow:w,time:t})})})}if(c.photo==null)c.photo=''});
+  d.curators.forEach(function(k){if(!k.payModel){k.payModel='perStudent';k.payAmount=2000}if(k.photo==null)k.photo=''});
+  d.students.forEach(function(s){if(s.photo==null)s.photo='';if(!s.goals)s.goals={}});
+  d.payments.forEach(function(p){if(!p.days)p.days=30;if(!p.method)p.method='Kaspi'});
+  d.reviews.forEach(function(r){if(!r.role)r.role='Родитель';if(r.photo==null)r.photo='';if(r.consent==null)r.consent=false;if(!r.by)r.by='admin'});
+  d.events.forEach(function(e){if(e.banner==null)e.banner='';if(e.text==null)e.text=''});
+  if(st.priceVer!==2){st.priceGroup=12000;st.priceIndiv=22000;st.priceVer=2;d.curators.forEach(function(k){k.payModel='fixed';k.payAmount=0})}
+  st.cancelHours==null&&(st.cancelHours=12);
+  if(!st.refundText)st.refundText='Отмена занятия в срок бесплатна. Позже занятие считается неявкой ученика. Если занятие не провёл консультант, его переносят или возвращают оплату за него. Неиспользованную часть подписки можно вернуть по заявлению в течение 7 дней.';
+  if(!st.offer)st.offer='ШАБЛОН, проверьте у юриста до запуска.\nИсполнитель оказывает услуги онлайн-занятий, Заказчик (родитель) оплачивает подписку. Стоимость и состав услуг указаны на сайте.\nЗаказчик вправе отменить занятие по правилам отмены и возврата. Персональные данные используются только для проведения занятий и связи с Заказчиком.';
+  d.parents=d.parents||[];d.students.forEach(function(x){if(!x.parentId&&x.parent){var p=d.parents.filter(function(q){return q.name===x.parent})[0];if(!p){p={id:uid(),name:x.parent,tg:'',wa:''};d.parents.push(p)}x.parentId=p.id}});
+  if(!d.bank)d.bank=[['math','Решите: 2x+6=14. Чему равен x?',['2','4','6','8'],1],['math','Сколько будет 15% от 200?',['15','20','30','45'],2],['math','Значение √144',['10','11','12','14'],2],['phys','Единица силы в СИ',['Джоуль','Ньютон','Ватт','Паскаль'],1],['phys','Путь 120 м за 20 с. Какая скорость?',['4 м/с','6 м/с','10 м/с','24 м/с'],1],['eng','She ___ to school every day.',['go','goes','going','gone'],1],['eng','Past Simple от buy',['buyed','boughted','bought','buy'],2],['eng','Antonym of ancient',['old','modern','huge','quiet'],1]].map(function(a){return {id:uid(),subjectId:a[0],q:a[1],opts:a[2],ans:a[3]}});
+  return d}
+var DB=load();
+function load(){try{var r=localStorage.getItem(KEY);if(r){var j=JSON.parse(r);if(j&&j.v===2)return migrate(j)}}catch(e){}return migrate(seed())}
+function commit(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){ui.msg='Не хватило места в браузере для сохранения. Уберите часть фото.'}render(true)}
+function resetDemo(){DB=migrate(seed());logout(true);commit()}
+function log(t){DB.audit.unshift({t:new Date().toISOString().slice(0,16).replace('T',' '),e:t});DB.audit=DB.audit.slice(0,100)}
+
+var ui={admTab:'dash',stTab:'home',cuTab:'stud',q:'',stSubj:'',bookFor:null,pubSubj:'',msg:'',cred:null,loginRole:null,loginErr:'',busy:false};
+/* сессия: хранится на время вкладки */
+function getSess(){try{return JSON.parse(sessionStorage.getItem('peerup-sess')||'null')}catch(e){return null}}
+function setSess(s){try{sessionStorage.setItem('peerup-sess',JSON.stringify(s))}catch(e){}}
+function logout(quiet){try{sessionStorage.removeItem('peerup-sess')}catch(e){}ui.loginRole=null;ui.cred=null;ui.msg='';ui.mock=null;if(!quiet)render()}
+var attempts={n:0,until:0};
+
+/* ================= 1. ПУБЛИЧНЫЙ САЙТ ================= */
+function viewPublic(){
+  var c=DB.content,st=DB.settings;
+  var t=tr(S(c.heroTitle)),m=tr(S(c.heroMark)),i=m?t.indexOf(m):-1;
+  var title=i>=0?[t.slice(0,i),h('mark',{},m),t.slice(i+m.length)]:[t];
+  var pub=DB.consultants.filter(function(x){return x.published&&x.status==='active'&&(!ui.pubSubj||x.subs.indexOf(ui.pubSubj)>=0)});
+  var approved=DB.reviews.filter(function(r){return r.status==='approved'});
+  var steps=[['Выберите предмет','Подберём консультанта по предмету и уровню ребёнка.'],['Получите доступ','Мы создаём личный кабинет ученика и передаём логин и пароль.'],
+    ['Занимайтесь онлайн','60 минут: повторение, объяснение на примерах, практика с разбором ошибок.'],['Следите за прогрессом','Куратор следит за заданиями и результатами. Раз в месяц короткий отчёт.']];
+  var safety=[['Данные ребёнка под защитой','Доступ к кабинету только по личному логину и паролю, которые выдаёт администратор.'],['Куратор рядом','За каждым учеником закреплён куратор 18+, он видит только своих учеников.'],['Общение только на платформе','Консультанты не переписываются с детьми в личных мессенджерах.'],['Жалобы за 24 часа','Консультанта отстраняем на время проверки и сообщаем результат.']];
+  var faq=[['Как проходят занятия?','Онлайн, по 60 минут. Расписание согласуем с вами.'],['Как попасть в личный кабинет?','Доступ выдаёт администратор после записи на пробный урок: логин и пароль для ученика.'],['Как оплатить?','Раз в месяц через Kaspi. Реквизиты отправим после записи.'],
+    ['Что если консультант не подойдёт?','Напишите нам, и мы подберём другого.'],['Вы гарантируете балл на экзамене?','Нет, конкретный балл мы не обещаем. Мы строим план подготовки и показываем динамику по тестам.']];
+  var tg=safeHandle(st.telegram);
+  var nav=[['directions','Направления'],['tutors','Консультанты'],['pricing','Стоимость'],['faq','Вопросы'],['contacts','Контакты']];
+  return h('div',{class:'pu'},
+    h('header',{class:'hdr full'},h('div',{class:'wrap'},
+      h('div',{class:'brand'},h('i',{},'P'),S(st.brand)),
+      h('nav',{class:'nav'},nav.map(function(n){return h('button',{type:'button',onclick:function(){scrollToId('p-'+n[0])}},n[1])})),
+      h('button',{class:'pbtn sm',type:'button',onclick:function(){location.hash='cabinet'}},'Личный кабинет'))),
+    h('main',{class:'wrap'},
+      eventsStrip(),h('section',{class:'hero'},
+        h('div',{},h('div',{class:'eyebrow'},'Peer-to-Peer обучение'),h('h1',{},title),h('p',{class:'t'},S(c.heroText)),
+          h('div',{class:'facts'},['Онлайн','60 минут','Куратор 18+','Отчёт раз в месяц'].map(function(x){return h('span',{},x)})),
+          h('div',{class:'row'},h('button',{class:'pbtn',type:'button',onclick:function(){scrollToId('p-contacts')}},'Записаться на пробный урок'),
+            h('button',{class:'pbtn ghost',type:'button',onclick:function(){scrollToId('p-how')}},'Как это работает'))),
+        noteEl()),
+      h('section',{class:'sec',id:'p-how'},h('h2',{},'Как это работает'),
+        h('div',{class:'grid'},steps.map(function(s,k){return h('div',{class:'card step'},h('div',{class:'n'},String(k+1)),h('h3',{},s[0]),h('p',{},s[1]))}))),
+      h('section',{class:'sec',id:'p-directions'},h('h2',{},'Направления'),
+        h('div',{class:'grid'},DB.subjects.map(function(s){var n=DB.consultants.filter(function(c2){return c2.published&&c2.status==='active'&&c2.subs.indexOf(s.id)>=0}).length;
+          return h('div',{class:'card'},h('h3',{},s.name),h('p',{},'Консультантов: '+n))}))),
+      h('section',{class:'sec',id:'p-tutors'},h('h2',{},'Наши консультанты'),
+        h('p',{class:'lead'},'Сильные студенты и выпускники. Каждый прошёл отбор, а занятия идут на платформе проекта.'),
+        h('div',{class:'filters'},[['','Все']].concat(DB.subjects.map(function(s){return [s.id,s.name]})).map(function(o){
+          return h('button',{type:'button','aria-pressed':String(ui.pubSubj===o[0]),onclick:function(){ui.pubSubj=o[0];render(true)}},o[1])})),
+        pub.length?h('div',{class:'grid'},pub.map(function(c2){return h('div',{class:'card tcard'},avatar(c2,'ava'),h('h3',{},c2.name),
+          h('div',{},c2.subs.map(function(id){var s=by(DB.subjects,id);return s&&h('span',{class:'chip',style:'margin:0 6px 6px 0'},s.name)})),h('p',{},c2.bio))})):h('p',{class:'lead'},'По этому направлению пока нет опубликованных консультантов.')),
+      h('section',{class:'sec'},h('h2',{},'Безопасность детей'),h('div',{class:'grid'},safety.map(function(s){return h('div',{class:'card',style:'border-left:5px solid var(--ok)'},h('h3',{},s[0]),h('p',{},s[1]))}))),
+      h('section',{class:'sec',id:'p-pricing'},h('h2',{},'Стоимость'),
+        h('p',{class:'lead'},'Оплата раз в месяц. Начинаем с пробного урока.'),
+        priceGrid(st)),
+      approved.length>0&&h('section',{class:'sec'},h('h2',{},'Отзывы'),h('div',{class:'grid'},approved.map(function(r){return h('div',{class:'card'},h('div',{class:'row'},avatar(r,'ava'),h('div',{},h('h3',{style:'font-size:.95rem;margin:0'},S(r.author)),h('p',{},S(r.role)))),h('p',{style:'margin-top:8px'},'«'+S(r.text)+'»'))}))),
+      h('section',{class:'sec faq',id:'p-faq'},h('h2',{},'Частые вопросы'),faq.map(function(q){return h('details',{},h('summary',{},q[0]),h('p',{},q[1]))})),
+      h('section',{class:'sec',id:'p-contacts'},h('div',{class:'contact'},h('h2',{},'Запишитесь на пробный урок'),h('p',{},'Напишите нам, и мы подберём консультанта по предмету и классу. Доступ в личный кабинет вы получите после записи.'),
+        tg?h('div',{class:'row'},h('a',{class:'pbtn',href:'https://t.me/'+tg,target:'_blank',rel:'noopener'},'Написать в Telegram')):h('p',{},'Контакты скоро появятся.'),
+        h('div',{class:'row'},h('button',{class:'pbtn',type:'button',onclick:function(){location.hash='cabinet'}},'Уже есть логин? Войти')))),
+      h('footer',{class:'ftr'},h('span',{},'© '+S(st.brand)+' · Онлайн · Казахстан'),h('span',{},'Платформа Peer-to-Peer обучения'))));
+}
+
+/* ================= 2. ЛИЧНЫЙ КАБИНЕТ: выбор роли и вход ================= */
+var ROLES=[['student','🎒','Ученик','Занятия, задания, прогресс'],['parent','👪','Родитель','Дети, оплата, правила'],['consultant','🎓','Консультант','Расписание, слоты, заработок'],['curator','🧭','Куратор','Мои ученики, расписание, результаты'],['admin','🛠','Администратор','Управление всей платформой']];
+
+function priceGrid(st){var g=st.priceGroup,i=st.priceIndiv,r=function(b,k){return Math.round(b*k/1000)*1000},go=function(){scrollToId('p-contacts')},ev='Ежемесячный отчёт родителю',gr='График под вашу семью';
+  var L=[['Пробный урок',3500,'за урок',['1 занятие 60 минут','Зачтём в подписку, если останетесь'],0],
+   ['Группа · 4 занятия',g,'в месяц за ученика',['До 5 человек','4 занятия по 60 минут',ev],1],
+   ['Группа · 8 занятий',r(g,1.83),'в месяц за ученика',['До 5 человек','2 занятия в неделю',ev],0],
+   ['ЕНТ-комплекс · группа',r(g,2.5),'в месяц за ученика',['3 предмета по 4 занятия','Пробники ЕНТ в кабинете',ev],0],
+   ['Индивидуально · 4 занятия',i,'в месяц',['Только ваш ребёнок','4 занятия по 60 минут',gr],0],
+   ['Индивидуально · 8 занятий',r(i,1.82),'в месяц',['Только ваш ребёнок','2 занятия в неделю',gr],0],
+   ['ЕНТ-интенсив · индивидуально',r(i,2.59),'в месяц',['12 занятий, 3 в неделю','Пробники ЕНТ и план подготовки',gr],0],
+   ['IELTS · индивидуально',i+4000,'в месяц',['4 занятия по 60 минут','Speaking и Writing с разбором',gr],0]];
+  return h('div',{class:'grid'},L.map(function(x){return h('div',{class:'card price'+(x[4]?' hl':'')},x[4]?h('span',{class:'badge'},'Выгоднее'):null,h('h3',{},x[0]),h('div',{class:'amt'},money(x[1]),h('small',{},x[2])),
+    h('ul',{class:'ticks'},x[3].map(function(t){return h('li',{},t)})),h('button',{class:x[4]?'pbtn':'pbtn ghost',type:'button',onclick:go},'Выбрать'))}))}
+function viewCabinet(){
+  var r=ui.loginRole;
+  var top=h('div',{class:'top'},h('div',{class:'brand'},S(DB.settings.brand)),h('button',{class:'pbtn ghost sm',type:'button',onclick:function(){location.hash=''}},'← На сайт'));
+  if(!r)return h('div',{class:'cb'},top,h('div',{},h('h1',{},'Личный кабинет'),h('p',{class:'lead'},'Выберите, кто вы. Логин и пароль выдаёт администратор.')),
+    h('div',{class:'roles'},ROLES.map(function(x){return h('button',{class:'role',type:'button',onclick:function(){ui.loginRole=x[0];ui.loginErr='';render()}},h('span',{class:'e'},x[1]),h('b',{},x[2]),h('span',{class:'d'},x[3]))})));
+  var role=ROLES.filter(function(x){return x[0]===r})[0];
+  var lg=h('input',{type:'text',autocomplete:'username',required:true,autocapitalize:'none',spellcheck:'false'}),pw=h('input',{type:'password',autocomplete:'current-password',required:true});
+  var err=h('div',{class:'err',role:'alert'},ui.loginErr),btn=h('button',{class:'pbtn',type:'submit'},'Войти');
+  var form=h('form',{class:'login',onsubmit:function(e){e.preventDefault();if(ui.busy)return;
+      var now=Date.now();if(now<attempts.until){err.textContent='Слишком много попыток. Подождите '+Math.ceil((attempts.until-now)/1000)+' сек.';return}
+      ui.busy=true;btn.disabled=true;btn.textContent='Проверяю…';
+      doLogin(r,normLogin(lg.value),pw.value).then(function(ok){ui.busy=false;
+        if(ok){attempts.n=0;ui.loginErr='';location.hash='cabinet';render()}
+        else{attempts.n++;if(attempts.n>=5){attempts.until=Date.now()+30000*Math.min(attempts.n-4,6)}ui.loginErr='Неверный логин или пароль';err.textContent=ui.loginErr;btn.disabled=false;btn.textContent='Войти';pw.value=''}
+      }).catch(function(){ui.busy=false;btn.disabled=false;btn.textContent='Войти';err.textContent='Вход недоступен в этом окне'})}},
+    h('h2',{style:'font-size:1.2rem'},role[1]+' '+role[2]),h('label',{class:'fl'},h('span',{},'Логин'),lg),h('label',{class:'fl'},h('span',{},'Пароль'),pw),err,btn,
+    h('button',{class:'pbtn ghost sm',type:'button',onclick:function(){ui.loginRole=null;render()}},'Другая роль'),
+    h('p',{class:'safe'},'Пароль не хранится в открытом виде. Забыли пароль? Попросите администратора выдать новый.'));
+  return h('div',{class:'cb'},top,h('h1',{},'Вход'),form);
+}
+function doLogin(role,login,password){
+  if(role==='admin'){
+    // всегда считаем хэш, чтобы время ответа не выдавало, верный ли логин
+    return pbkdf2(password,ADMIN.salt).then(function(hx){var ok=login===ADMIN.login&&eqHex(hx,ADMIN.hash);if(ok)setSess({role:'admin'});return ok});
+  }
+  var acc=DB.accounts.filter(function(a){return a.role===role&&a.login===login})[0];
+  var salt=acc?acc.salt:ADMIN.salt;
+  return pbkdf2(password,salt).then(function(hx){var ok=!!acc&&eqHex(hx,acc.hash);if(ok)setSess({role:role,ref:acc.ref});return ok});
+}
+function createAccount(role,ref,loginWanted,pwWanted,nameHint){
+  var login=normLogin(loginWanted)||slug(nameHint||(by({student:DB.students,curator:DB.curators,parent:DB.parents,consultant:DB.consultants}[role]||[],ref)||{}).name)+Math.floor(100+Math.random()*900);
+  if(!validLogin(login))return Promise.reject(new Error('Логин: 3–24 символа, латиница, цифры, _ . -'));
+  if(login===ADMIN.login||DB.accounts.some(function(a){return a.login===login}))return Promise.reject(new Error('Такой логин уже занят'));
+  var pwd=pwWanted||genPassword();
+  if(pwd.length<8)return Promise.reject(new Error('Пароль: минимум 8 символов'));
+  var salt=newSalt();
+  return pbkdf2(pwd,salt).then(function(hx){DB.accounts.push({id:uid(),role:role,ref:ref,login:login,salt:salt,hash:hx});log('Создан доступ: '+role+' '+login);return {login:login,password:pwd}});
+}
+function resetPassword(acc){var pwd=genPassword(),salt=newSalt();return pbkdf2(pwd,salt).then(function(hx){acc.salt=salt;acc.hash=hx;log('Сброшен пароль: '+acc.login);return {login:acc.login,password:pwd}})}
+function showCred(who,c){ui.cred={who:who,login:c.login,password:c.password};ui.msg='';commit()}
+function fail(e){ui.msg=(e&&e.message)||'Ошибка';render(true)}
+
+/* ================= общие виджеты ================= */
+function tbl(cols,rows,empty){
+  if(!rows.length)return h('p',{class:'sub mute'},empty||'Пока пусто.');
+  return h('div',{class:'tw'},h('table',{},h('thead',{},h('tr',{},cols.map(function(c){return h('th',{},c[0])}))),
+    h('tbody',{},rows.map(function(r){return h('tr',{},cols.map(function(c){return h('td',{},c[1](r))}))}))));
+}
+function form(fields,label,onSubmit){
+  var els={};
+  return h('form',{class:'frm',onsubmit:function(e){e.preventDefault();var v={};fields.forEach(function(x){var el=els[x.k];v[x.k]=x.t==='file'?(el.files[0]||null):x.t==='check'?el.checked:el.value});onSubmit(v)}},
+    fields.map(function(x){var el;
+      if(x.t==='select')el=h('select',{},x.opts.map(function(o){return h('option',{value:o[0]},o[1])}));
+      else if(x.t==='area')el=h('textarea',{required:x.req?true:null,maxlength:x.max||600});
+      else if(x.t==='file')el=h('input',{type:'file',accept:'image/jpeg,image/png,image/webp'});
+      else if(x.t==='check')el=h('input',{type:'checkbox',required:x.req?true:null});
+      else el=h('input',{type:x.t||'text',required:x.req?true:null,min:x.min,max:x.max,placeholder:x.ph,autocomplete:'off'});
+      if(x.v!=null){if(x.t==='check')el.checked=!!x.v;else el.value=x.v}
+      els[x.k]=el;return h('label',{class:'fl'+(x.t==='check'?' ck':'')},h('span',{},x.l),el)}),
+    h('button',{class:ui.role==='cu'?'cb2':'b',type:'submit'},label));
+}
+function sName(id){var s=by(DB.students,id);return s?s.name:'—'}
+function cName(id){var c=by(DB.consultants,id);return c?c.name:'—'}
+function subName(id){var s=by(DB.subjects,id);return s?s.name:'—'}
+function msgNode(){return ui.msg?h('div',{class:'msg'},ui.msg):null}
+function logoutBtn(cls){return h('button',{type:'button',class:cls,onclick:function(){logout();location.hash='cabinet'}},'Выйти')}
+function accOf(role,ref){return DB.accounts.filter(function(a){return a.role===role&&a.ref===ref})[0]}
+function accButtons(role,ref,name,btnCls){
+  var a=accOf(role,ref);
+  if(!a)return h('button',{class:btnCls+' sm',type:'button',onclick:function(){createAccount(role,ref,'','').then(function(c){showCred(name,c)}).catch(fail)}},'Создать доступ');
+  return h('div',{class:'row'},h('span',{class:'tag mono'},a.login),h('button',{class:btnCls+' sm ghost',type:'button',onclick:function(){resetPassword(a).then(function(c){showCred(name,c)}).catch(fail)}},'Новый пароль'),
+    twoStep('Закрыть доступ',function(){DB.accounts=DB.accounts.filter(function(x){return x.id!==a.id});log('Закрыт доступ: '+a.login);commit()},btnCls+' sm bad'));
+}
+function credBox(){
+  if(!ui.cred)return null;var c=ui.cred;
+  var copy=h('button',{class:'b sm ghost',type:'button'},'Скопировать');
+  copy.addEventListener('click',function(){var t='Логин: '+c.login+'\nПароль: '+c.password;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){copy.textContent='Скопировано'}).catch(function(){copy.textContent='Выделите и скопируйте вручную'})});
+  return h('div',{class:'cred'},h('b',{},'Доступ для: '+c.who),h('p',{style:'margin:6px 0'},'Логин: ',h('code',{},c.login),'  Пароль: ',h('code',{},c.password)),
+    h('p',{class:'sub'},'Пароль показан один раз. В базе остаётся только его хэш, прочитать пароль потом нельзя. Передайте его лично.'),
+    h('div',{class:'row'},copy,h('button',{class:'b sm',type:'button',onclick:function(){ui.cred=null;render(true)}},'Я передал(а), скрыть')));
+}
+function stats(){
+  var r=calc(periodRange('month',dstr(0)));
+  return {rev:r.rev,pay:r.consT+r.curT,margin:r.profit,unpaid:DB.students.filter(function(s){return !s.paidUntil||s.paidUntil<dstr(0)}).length}
+}
+function delStudent(id){
+  DB.students=DB.students.filter(function(x){return x.id!==id});
+  ['sessions','homework','tests','payments'].forEach(function(k){DB[k]=DB[k].filter(function(x){return x.studentId!==id})});
+  DB.accounts=DB.accounts.filter(function(a){return !(a.role==='student'&&a.ref===id)});delete DB.favs[id];log('Удалён ученик '+id);
+}
+
+/* ================= 3. АДМИН ================= */
+var ADM=[['dash','Дашборд'],['stud','Ученики'],['par','Родители и доступы'],['bank','Банк ЕНТ'],['rules','Правила и оферта'],['curs','Кураторы'],['cons','Консультанты'],['subj','Предметы'],['sched','Расписание'],['pay','Платежи'],['acct','Бухгалтерия'],['rev','Отзывы'],['site','Контент сайта'],['comm','Сообщество и объявления'],['log','Журнал и безопасность']];
+function viewAdmin(){
+  ui.role='ad';
+  var body=({dash:adDash,stud:adStud,par:adPar,bank:adBank,rules:adRules,curs:adCurs,cons:adCons,subj:adSubj,sched:adSched,pay:adPay,acct:adAcct,rev:adRev,site:adSite,comm:adComm,log:adLog})[ui.admTab]();
+  return h('div',{class:'ad'},
+    h('aside',{class:'side'},h('div',{class:'logo'},'peerup/admin',h('small',{},'панель управления')),
+      ADM.map(function(t){return h('button',{type:'button','aria-current':ui.admTab===t[0]?'page':null,onclick:function(){ui.admTab=t[0];ui.msg='';render(true)}},t[1])}),
+      h('div',{class:'sp'}),logoutBtn('b ghost sm')),
+    h('main',{class:'main'},h('div',{class:'topbar'},h('span',{},'Вы вошли как администратор'),h('button',{class:'b ghost sm',type:'button',onclick:function(){location.hash=''}},'Открыть сайт')),
+      msgNode(),credBox(),body));
+}
+function adDash(){
+  var s=stats(),max=1,per=DB.subjects.map(function(x){var n=DB.sessions.filter(function(y){return y.subjectId===x.id}).length;if(n>max)max=n;return [x.name,n]});
+  var up=DB.sessions.filter(function(x){return x.status==='planned'}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).slice(0,6);
+  var noAcc=DB.students.filter(function(x){return !accOf('student',x.id)}).length;
+  return h('div',{},h('h1',{},'Дашборд'),h('p',{class:'sub'},'Текущий месяц'),
+    h('div',{class:'kpis'},[['Выручка',money(s.rev)],['Выплаты консультантам',money(s.pay)],['Маржа',money(s.margin)],['Ученики',DB.students.length],['Подписка закончилась',s.unpaid],['Без доступа в кабинет',noAcc]].map(function(k){return h('div',{class:'kpi'},h('span',{},k[0]),h('b',{},String(k[1])))})),
+    h('div',{class:'grid2'},
+      h('div',{class:'panel'},h('h2',{},'Занятия по предметам'),per.map(function(p){return h('div',{style:'margin-bottom:8px'},h('div',{class:'row'},h('span',{class:'grow'},p[0]),h('span',{class:'mono'},String(p[1]))),h('div',{class:'bar'},h('i',{style:'width:'+Math.round(p[1]/max*100)+'%'})))})),
+      h('div',{class:'panel'},h('h2',{},'Требует внимания'),h('ul',{style:'margin:0;padding-left:18px;display:grid;gap:6px'},
+        s.unpaid?h('li',{},'Учеников с закончившейся подпиской: '+s.unpaid):null,noAcc?h('li',{},'Учеников без логина: '+noAcc):null,
+        DB.consultants.some(function(c){return c.status==='review'})?h('li',{},'Анкеты консультантов на отборе: '+DB.consultants.filter(function(c){return c.status==='review'}).length):null,
+        DB.reviews.some(function(r){return r.status==='pending'})?h('li',{},'Отзывы на модерации: '+DB.reviews.filter(function(r){return r.status==='pending'}).length):null))),
+    h('div',{class:'panel'},h('h2',{},'Ближайшие занятия'),tbl([['Когда',function(x){return fdate(x.date)+' '+x.time}],['Ученик',function(x){return sName(x.studentId)}],['Консультант',function(x){return cName(x.consultantId)}],['Предмет',function(x){return subName(x.subjectId)}]],up)));
+}
+function adStud(){
+  return h('div',{},h('h1',{},'Ученики'),h('p',{class:'sub'},'Профили и доступы. Логин и пароль создаёте только вы.'),
+    h('div',{class:'panel'},h('h2',{},'Новый ученик'),form([{k:'name',l:'Имя',req:1},{k:'grade',l:'Класс',req:1},{k:'parent',l:'Родитель'},{k:'contact',l:'Контакт родителя'},
+      {k:'cur',l:'Куратор',t:'select',opts:[['','— без куратора —']].concat(DB.curators.map(function(c){return [c.id,c.name]}))},
+      {k:'login',l:'Логин (пусто = авто)',ph:'авто'},{k:'pw',l:'Пароль (пусто = авто)',ph:'авто'}],'Создать профиль и доступ',
+      function(v){var s={id:uid(),name:v.name.trim(),grade:v.grade.trim(),parent:v.parent,contact:v.contact,curatorId:v.cur,paidUntil:'',note:''};
+        createAccount('student',s.id,v.login,v.pw,s.name).then(function(c){DB.students.push(s);log('Создан ученик '+s.name);showCred(s.name,c)}).catch(fail)})),
+    h('div',{class:'panel'},tbl([['Имя',function(s){return s.name+' · '+s.grade}],
+      ['Куратор',function(s){var sel=h('select',{},[h('option',{value:''},'—')].concat(DB.curators.map(function(c){return h('option',{value:c.id},c.name)})));sel.value=s.curatorId||'';sel.addEventListener('change',function(){s.curatorId=sel.value;commit()});return sel}],
+      ['Подписка до',function(s){var ok=s.paidUntil&&s.paidUntil>=dstr(0);return h('span',{class:'tag '+(ok?'ok':'warn')},s.paidUntil?fdate(s.paidUntil):'нет')}],
+      ['Доступ',function(s){return accButtons('student',s.id,s.name,'b')}],
+      ['',function(s){return twoStep('Удалить',function(){delStudent(s.id);commit()},'b sm bad')}]],DB.students)));
+}
+function adParOld(){
+  return h('div',{},h('h1',{},'Родители'),h('p',{class:'sub'},'Контакты и платежи. Собираются из карточек учеников.'),
+    h('div',{class:'panel'},tbl([['Родитель',function(s){return s.parent||'—'}],['Контакт',function(s){return s.contact||'—'}],['Ребёнок',function(s){return s.name+' ('+s.grade+')'}],
+      ['Оплачено',function(s){return h('span',{class:'mono'},money(DB.payments.filter(function(p){return p.studentId===s.id}).reduce(function(a,p){return a+p.amount},0)))}]],DB.students)));
+}
+function adCurs(){
+  return h('div',{},h('h1',{},'Кураторы'),h('p',{class:'sub'},'Куратор видит только закреплённых за ним учеников, без платежей и данных других кураторов.'),
+    h('div',{class:'panel'},h('h2',{},'Новый куратор'),form([{k:'name',l:'Имя',req:1},{k:'login',l:'Логин (пусто = авто)',ph:'авто'},{k:'pw',l:'Пароль (пусто = авто)',ph:'авто'}],'Создать куратора и доступ',
+      function(v){var k={id:uid(),name:v.name.trim()};createAccount('curator',k.id,v.login,v.pw,k.name).then(function(c){DB.curators.push(k);log('Создан куратор '+k.name);showCred(k.name,c)}).catch(fail)})),
+    h('div',{class:'panel'},tbl([['Имя',function(k){return k.name}],['Учеников',function(k){return DB.students.filter(function(s){return s.curatorId===k.id}).length}],['Доступ',function(k){return accButtons('curator',k.id,k.name,'b')}],
+      ['',function(k){return twoStep('Удалить',function(){DB.curators=DB.curators.filter(function(x){return x.id!==k.id});DB.students.forEach(function(s){if(s.curatorId===k.id)s.curatorId=''});DB.accounts=DB.accounts.filter(function(a){return !(a.role==='curator'&&a.ref===k.id)});commit()},'b sm bad')}]],DB.curators)));
+}
+function adCons(){
+  var ed=ui.consEdit?by(DB.consultants,ui.consEdit):null;
+  var panel=null;
+  if(ed){
+    var sl=(ed.avail||[]).slice().sort(function(a,b){return (a.dow+7-1)%7-(b.dow+7-1)%7||a.time.localeCompare(b.time)});
+    panel=h('div',{class:'panel'},h('h2',{},'Профиль: '+ed.name),
+      form([{k:'n',l:'Имя',req:1,v:ed.name},{k:'b',l:'О себе (видно на сайте и ученикам)',t:'area',v:ed.bio},{k:'r',l:'Ставка, ₸/час',t:'number',min:0,v:ed.rate}],'Сохранить',function(v){ed.name=v.n.slice(0,60);ed.bio=v.b.slice(0,300);ed.rate=Number(v.r)||0;ui.msg='Сохранено';commit()}),
+      h('p',{class:'sub',style:'margin-top:12px'},'Фото:'),photoInput(ed,'photo',256,'b'),
+      h('p',{class:'sub',style:'margin-top:12px'},'Свободные слоты (каждую неделю). Ученики записываются только на свободные слоты.'),
+      h('div',{class:'row'},sl.length?sl.map(function(a){return h('span',{class:'tag'},DOW[a.dow]+' '+a.time+' ',h('button',{type:'button','aria-label':'Убрать слот',style:'border:0;background:none;cursor:pointer;color:inherit',onclick:function(){ed.avail=ed.avail.filter(function(x){return x!==a&&!(x.dow===a.dow&&x.time===a.time)});commit()}},'×'))}):h('span',{class:'sub'},'Слотов нет, записаться нельзя.')),
+      h('div',{style:'margin-top:10px'},form([{k:'w',l:'День',t:'select',opts:[[1,'Пн'],[2,'Вт'],[3,'Ср'],[4,'Чт'],[5,'Пт'],[6,'Сб'],[0,'Вс']]},{k:'t',l:'Время',t:'time',req:1,v:'17:00'}],'Добавить слот',
+        function(v){var w=Number(v.w);if(!ed.avail.some(function(a){return a.dow===w&&a.time===v.t}))ed.avail.push({dow:w,time:v.t});commit()})),
+      h('div',{style:'margin-top:10px'},h('button',{class:'b ghost sm',type:'button',onclick:function(){ui.consEdit=null;render(true)}},'Закрыть профиль')));
+  }
+  return h('div',{},h('h1',{},'Консультанты'),h('p',{class:'sub'},'Анкеты, отбор, публикация, ставки, фото и свободные слоты.'),panel,
+    h('div',{class:'panel'},h('h2',{},'Новая анкета'),form([{k:'name',l:'Имя',req:1},{k:'sub',l:'Предмет',t:'select',opts:DB.subjects.map(function(s){return [s.id,s.name]})},{k:'rate',l:'Ставка, ₸/час',t:'number',v:DB.settings.defaultRate,min:0},{k:'bio',l:'Коротко о себе'}],'Добавить на отбор',
+      function(v){DB.consultants.push({id:uid(),name:v.name,subs:[v.sub],bio:v.bio||'Анкета заполняется.',rate:Number(v.rate)||0,published:false,status:'review',photo:'',avail:[]});commit()})),
+    h('div',{class:'panel'},tbl([['',function(c){return avatar(c,'thumb')}],['Имя',function(c){return c.name}],['Предметы',function(c){return c.subs.map(subName).join(', ')}],
+      ['Статус',function(c){return h('span',{class:'tag '+(c.status==='active'?'ok':'warn')},c.status==='active'?'принят':'на отборе')}],
+      ['Каталог',function(c){return h('span',{class:'tag '+(c.published?'ok':'')},c.published?'опубликован':'скрыт')}],
+      ['Ставка',function(c){return h('span',{class:'mono'},money(c.rate))}],
+      ['Действия',function(c){return h('div',{class:'row'},
+        c.status!=='active'&&h('button',{class:'b sm',type:'button',onclick:function(){c.status='active';commit()}},'Принять'),
+        h('button',{class:'b sm ghost',type:'button',onclick:function(){c.published=!c.published;commit()}},c.published?'Скрыть':'Опубликовать'),
+        h('button',{class:'b sm ghost',type:'button',onclick:function(){ui.consEdit=c.id;ui.msg='';render(true);window.scrollTo(0,0)}},'Профиль и слоты'),
+        twoStep('Удалить',function(){if(DB.sessions.some(function(x){return x.consultantId===c.id&&x.status!=='planned'})){ui.msg='У консультанта есть проведённые занятия, удалить нельзя (они нужны для выплат). Скройте анкету.';return render(true)}
+          DB.consultants=DB.consultants.filter(function(x){return x.id!==c.id});DB.sessions=DB.sessions.filter(function(x){return x.consultantId!==c.id});commit()},'b sm bad'))}]],DB.consultants)));
+}
+function adSubj(){
+  return h('div',{},h('h1',{},'Предметы'),h('p',{class:'sub'},'Направления обучения.'),
+    h('div',{class:'panel'},form([{k:'name',l:'Новое направление',req:1}],'Добавить',function(v){DB.subjects.push({id:uid(),name:v.name});commit()})),
+    h('div',{class:'panel'},tbl([['Название',function(s){return s.name}],['Консультантов',function(s){return DB.consultants.filter(function(c){return c.subs.indexOf(s.id)>=0}).length}],
+      ['',function(s){return twoStep('Удалить',function(){DB.subjects=DB.subjects.filter(function(x){return x.id!==s.id});commit()},'b sm bad')}]],DB.subjects)));
+}
+function conflict(cid,d,t,studentId){return DB.sessions.some(function(x){return x.status==='planned'&&x.date===d&&x.time===t&&(x.consultantId===cid||x.studentId===studentId)})}
+function adSched(){
+  var all=DB.sessions.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)});
+  return h('div',{},h('h1',{},'Расписание'),h('p',{class:'sub'},'Статус занятия можно менять в любую сторону: запланировано, проведено, не проведено. От статуса зависят выплаты консультантам.'),
+    DB.students.length&&DB.consultants.length&&DB.subjects.length?h('div',{class:'panel'},h('h2',{},'Новое занятие'),form([
+      {k:'st',l:'Ученик',t:'select',opts:DB.students.map(function(s){return [s.id,s.name]})},{k:'c',l:'Консультант',t:'select',opts:DB.consultants.map(function(c){return [c.id,c.name]})},
+      {k:'sub',l:'Предмет',t:'select',opts:DB.subjects.map(function(s){return [s.id,s.name]})},{k:'d',l:'Дата',t:'date',req:1,v:dstr(1),min:dstr(0)},{k:'t',l:'Время',t:'time',req:1,v:'17:00'}],'Создать',
+      function(v){if(conflict(v.c,v.d,v.t,v.st)){ui.msg='Это время уже занято у консультанта или ученика';return render(true)}DB.sessions.push({id:uid(),studentId:v.st,consultantId:v.c,subjectId:v.sub,date:v.d,time:v.t,status:'planned'});ui.msg='';commit()})):h('p',{class:'sub'},'Добавьте ученика, консультанта и предмет.'),
+    h('div',{class:'panel'},tbl([['Когда',function(x){return h('span',{class:'mono'},fdate(x.date)+' '+x.time)}],['Ученик',function(x){return sName(x.studentId)}],['Консультант',function(x){return cName(x.consultantId)}],['Предмет',function(x){return subName(x.subjectId)}],
+      ['Статус',statusCtl],
+      ['',function(x){return twoStep('Удалить запись',function(){DB.sessions=DB.sessions.filter(function(y){return y.id!==x.id});commit()},'b sm bad')}]],all)));
+}
+function adPay(){
+  var s=stats(),ed=ui.editPay?by(DB.payments,ui.editPay):null;
+  var methods=[['Kaspi','Kaspi'],['Наличные','Наличные'],['Перевод','Перевод'],['Другое','Другое']],stOpts=DB.students.map(function(x){return [x.id,x.name]});
+  function fields(p){return [{k:'st',l:'Ученик',t:'select',opts:stOpts,v:p&&p.studentId},{k:'a',l:'Сумма, ₸',t:'number',req:1,min:1,v:p?p.amount:DB.settings.priceGroup},{k:'d',l:'Дата оплаты',t:'date',req:1,v:p?p.date:dstr(0),max:dstr(0)},
+    {k:'days',l:'Дней подписки',t:'number',req:1,min:1,max:366,v:p?p.days:30},{k:'m',l:'Способ',t:'select',opts:methods,v:p&&p.method},{k:'n',l:'Комментарий',v:p&&p.note,ph:'необязательно'}]}
+  function read(v){return {studentId:v.st,amount:Number(v.a),date:v.d,days:Math.max(1,Number(v.days)||30),method:v.m,note:S(v.n).slice(0,120)}}
+  function ok(p){return p.amount>0&&p.date<=dstr(0)}
+  var panel=ed?h('div',{class:'panel'},h('h2',{},'Исправить оплату'),form(fields(ed),'Сохранить изменения',function(v){
+      var n=read(v);if(!ok(n)){ui.msg='Проверьте сумму и дату (дата не из будущего)';return render(true)}
+      var old=sName(ed.studentId)+' '+money(ed.amount)+' '+fdate(ed.date),prev=ed.studentId;
+      Object.assign(ed,n);ed.edited=dstr(0);recalcPaid(prev);recalcPaid(ed.studentId);log('Исправлена оплата: было '+old+', стало '+sName(ed.studentId)+' '+money(ed.amount)+' '+fdate(ed.date));ui.editPay=null;ui.msg='Оплата исправлена, подписка пересчитана';commit()}),
+      h('div',{style:'margin-top:10px'},h('button',{class:'b ghost sm',type:'button',onclick:function(){ui.editPay=null;render(true)}},'Отмена'))):
+    (DB.students.length>0?h('div',{class:'panel'},h('h2',{},'Записать оплату'),form(fields(null),'Записать',function(v){
+      var n=read(v);if(!ok(n)){ui.msg='Проверьте сумму и дату (дата не из будущего)';return render(true)}
+      n.id=uid();DB.payments.push(n);recalcPaid(n.studentId);log('Оплата '+sName(n.studentId)+' '+money(n.amount));ui.msg='';commit()})):null);
+  return h('div',{},h('h1',{},'Платежи'),h('p',{class:'sub'},'Любую оплату можно исправить или удалить. Подписка ученика пересчитывается сама, каждое изменение остаётся в журнале.'),
+    h('div',{class:'kpis'},[['Выручка (мес.)',money(s.rev)],['Подписка закончилась',s.unpaid]].map(function(k){return h('div',{class:'kpi'},h('span',{},k[0]),h('b',{},String(k[1])))})),
+    panel,
+    h('div',{class:'panel'},h('h2',{},'Оплаты'),tbl([['Дата',function(p){return h('span',{class:'mono'},fdate(p.date))}],['Ученик',function(p){return sName(p.studentId)}],['Сумма',function(p){return h('span',{class:'mono'},money(p.amount))}],
+      ['Подписка',function(p){return p.days+' дн.'}],['Способ',function(p){return p.method}],['Комментарий',function(p){return p.note||''}],
+      ['',function(p){return h('div',{class:'row'},p.edited&&h('span',{class:'tag warn'},'исправлено'),h('button',{class:'b sm ghost',type:'button',onclick:function(){ui.editPay=p.id;ui.msg='';render(true);window.scrollTo(0,0)}},'Изменить'),
+        twoStep('Удалить',function(){var sid=p.studentId;log('Удалена оплата '+sName(sid)+' '+money(p.amount)+' '+fdate(p.date));DB.payments=DB.payments.filter(function(x){return x.id!==p.id});recalcPaid(sid);if(ui.editPay===p.id)ui.editPay=null;commit()},'b sm bad'))}]],
+      DB.payments.slice().sort(function(a,b){return b.date.localeCompare(a.date)}))));
+}
+function adRev(){
+  var tag={pending:['warn','ждёт'],approved:['ok','опубликован'],rejected:['bad','отклонён']},ed=ui.editRev?by(DB.reviews,ui.editRev):null;
+  var roles=[['Родитель','Родитель'],['Ученик','Ученик'],['Куратор','Куратор']];
+  var panel=ed?h('div',{class:'panel'},h('h2',{},'Править отзыв'),form([{k:'a',l:'Имя',req:1,v:ed.author},{k:'ro',l:'Кто',t:'select',opts:roles,v:ed.role},{k:'t',l:'Текст',t:'area',req:1,v:ed.text}],'Сохранить',
+      function(v){ed.author=v.a.slice(0,60);ed.role=v.ro;ed.text=v.t.slice(0,600);ui.editRev=null;log('Исправлен отзыв '+ed.author);commit()}),
+      h('div',{style:'margin-top:10px'},h('p',{class:'sub'},'Фото:'),photoInput(ed,'photo',256,'b')),
+      h('div',{style:'margin-top:10px'},h('button',{class:'b ghost sm',type:'button',onclick:function(){ui.editRev=null;render(true)}},'Готово'))):
+    h('div',{class:'panel'},h('h2',{},'Написать отзыв от имени человека'),h('p',{class:'sub'},'Родитель, ученик или куратор попросил вас оставить отзыв. Нужно его согласие на публикацию имени и фото.'),
+      form([{k:'a',l:'Имя (как показать на сайте)',req:1},{k:'ro',l:'Кто',t:'select',opts:roles},{k:'t',l:'Текст отзыва',t:'area',req:1},{k:'f',l:'Фото (необязательно)',t:'file'},
+        {k:'ck',l:'Есть согласие на публикацию имени и фото',t:'check',req:1},{k:'pub',l:'Сразу',t:'select',opts:[['approved','Опубликовать'],['pending','Оставить на модерации']]}],'Добавить',
+        function(v){var save=function(p){DB.reviews.push({id:uid(),author:v.a.slice(0,60),role:v.ro,text:v.t.slice(0,600),photo:p||'',status:v.pub,by:'admin',ref:'',consent:true,date:dstr(0)});log('Админ добавил отзыв: '+v.a);commit()};
+          if(v.f)readImage(v.f,256,.8).then(save).catch(fail);else save('')}));
+  return h('div',{},h('h1',{},'Отзывы'),h('p',{class:'sub'},'Ученики и кураторы пишут отзывы из своих кабинетов, они попадают сюда на модерацию. На сайте видны только опубликованные.'),panel,
+    h('div',{class:'panel'},tbl([['',function(r){return avatar(r,'thumb')}],['Автор',function(r){return h('div',{},h('b',{},r.author),h('div',{class:'sub',style:'margin:0'},r.role+' · '+(r.by==='admin'?'написал админ':r.by==='student'?'из кабинета ученика':'из кабинета куратора')))}],['Текст',function(r){return r.text}],
+      ['Статус',function(r){return h('div',{class:'row'},h('span',{class:'tag '+tag[r.status][0]},tag[r.status][1]),h('span',{class:'tag '+(r.consent?'ok':'bad')},r.consent?'согласие есть':'нет согласия'))}],
+      ['',function(r){return h('div',{class:'row'},
+        r.status!=='approved'&&h('button',{class:'b sm',type:'button',disabled:r.consent?null:true,onclick:function(){r.status='approved';log('Опубликован отзыв '+r.author);commit()}},'Опубликовать'),
+        r.status==='approved'&&h('button',{class:'b sm ghost',type:'button',onclick:function(){r.status='pending';commit()}},'Снять с публикации'),
+        r.status==='pending'&&h('button',{class:'b sm ghost',type:'button',onclick:function(){r.status='rejected';commit()}},'Отклонить'),
+        h('button',{class:'b sm ghost',type:'button',onclick:function(){ui.editRev=r.id;render(true);window.scrollTo(0,0)}},'Править'),
+        twoStep('Удалить',function(){DB.reviews=DB.reviews.filter(function(x){return x.id!==r.id});commit()},'b sm bad'))}]],DB.reviews.slice().sort(function(a,b){return (a.status==='pending'?0:1)-(b.status==='pending'?0:1)}))));
+}
+function adSite(){
+  var c=DB.content,st=DB.settings;
+  return h('div',{},h('h1',{},'Контент сайта'),h('p',{class:'sub'},'Правки сразу меняют публичный сайт.'),
+    h('div',{class:'panel'},form([{k:'t',l:'Главный заголовок',v:c.heroTitle},{k:'m',l:'Выделить маркером (фраза из заголовка)',v:c.heroMark},{k:'x',l:'Текст под заголовком',v:c.heroText},
+      {k:'g',l:'Цена: группа, ₸',t:'number',v:st.priceGroup,min:0},{k:'i',l:'Цена: индивидуально, ₸',t:'number',v:st.priceIndiv,min:0},{k:'tg',l:'Telegram (без @)',v:st.telegram},{k:'br',l:'Название проекта',v:st.brand}],'Сохранить',
+      function(v){c.heroTitle=v.t;c.heroMark=v.m;c.heroText=v.x;st.priceGroup=Number(v.g)||0;st.priceIndiv=Number(v.i)||0;st.telegram=safeHandle(v.tg);st.brand=v.br||'PeerUp';ui.msg='Сохранено';commit()})));
+}
+function adComm(){
+  return h('div',{},h('h1',{},'Сообщество и объявления'),h('p',{class:'sub'},'Эфиры, встречи, конкурсы. Предстоящие события автоматически показываются на главной странице сайта и в кабинете ученика. Розыгрыши с призами запускайте только после юридической проверки.'),
+    h('div',{class:'panel'},h('h2',{},'Новое событие'),form([{k:'t',l:'Название',req:1},{k:'d',l:'Дата',t:'date',req:1,v:dstr(7),min:dstr(0)},{k:'tm',l:'Время',t:'time'},{k:'ty',l:'Тип',t:'select',opts:[['Трансляция','Трансляция'],['Встреча','Встреча'],['Олимпиада','Олимпиада'],['Конкурс','Конкурс'],['Другое','Другое']]},
+      {k:'x',l:'Описание',t:'area',max:300},{k:'ln',l:'Ссылка (https://…)',ph:'необязательно'},{k:'f',l:'Баннер (JPG/PNG/WebP)',t:'file'}],'Опубликовать',
+      function(v){var save=function(b){DB.events.push({id:uid(),title:v.t.slice(0,100),date:v.d,time:v.tm,type:v.ty,text:v.x.slice(0,300),link:safeHttps(v.ln),banner:b||''});commit()};
+        if(v.f)readImage(v.f,1000,.72).then(save).catch(fail);else save('')})),
+    h('div',{class:'panel'},tbl([['Дата',function(e){return fdate(e.date)+(e.time?' '+e.time:'')}],['Название',function(e){return e.title}],['Тип',function(e){return h('span',{class:'tag'},e.type)}],['Баннер',function(e){return photoInput(e,'banner',1000,'b')}],
+      ['',function(e){return twoStep('Удалить',function(){DB.events=DB.events.filter(function(x){return x.id!==e.id});commit()},'b sm bad')}]],DB.events.slice().sort(function(a,b){return a.date.localeCompare(b.date)}))));
+}
+function adLog(){
+  return h('div',{},h('h1',{},'Журнал и безопасность'),h('p',{class:'sub'},'Действия с доступами и оплатами.'),
+    h('div',{class:'panel'},h('h2',{},'Что защищено в этом прототипе'),h('ul',{style:'margin:0;padding-left:18px;display:grid;gap:4px'},
+      ['Пароли хранятся только как соль + PBKDF2-SHA256, 210 000 итераций. Прочитать пароль нельзя.','Пароль администратора в коде тоже только в виде хэша.','Роли разделены: ученик видит своё, куратор своих учеников, платежи и доступы только у администратора.','Пять неверных попыток входа включают паузу, ответ не выдаёт, существует ли логин.','Весь пользовательский текст выводится без разметки, вставить в страницу код нельзя.'].map(function(x){return h('li',{},x)})),
+      h('p',{class:'sub',style:'margin-top:10px'},'Чего прототип дать не может: база лежит в браузере, а проверка идёт на устройстве. Для запуска нужен сервер (см. план запуска).')),
+    h('div',{class:'panel'},h('h2',{},'Журнал'),tbl([['Время',function(x){return h('span',{class:'mono'},x.t)}],['Событие',function(x){return x.e}]],DB.audit)),
+    h('div',{class:'panel'},h('h2',{},'Демо-данные'),twoStep('Сбросить все данные',resetDemo,'b bad')));
+}
+
+/* ================= 4. КУРАТОР ================= */
+var CUT=[['stud','Мои ученики'],['sched','Расписание'],['hw','Задания'],['res','Результаты'],['rev','Отзыв'],['me','Профиль']];
+function viewCurator(me){
+  ui.role='cu';
+  var mine=DB.students.filter(function(s){return s.curatorId===me.id});
+  var page=({stud:cuStud,sched:cuSched,hw:cuHw,res:cuRes,rev:function(){return cuRev(me)},me:function(){return cuMe(me)}})[ui.cuTab](mine);
+  return h('div',{class:'cu'},h('header',{class:'hdr full'},h('div',{class:'wrap'},h('div',{class:'brand'},S(DB.settings.brand),h('small',{},'кабинет куратора · '+me.name)),logoutBtn('cb2 ghost sm')),
+    h('div',{class:'wrap'},h('div',{class:'tabs',role:'tablist'},CUT.map(function(t){return h('button',{type:'button','aria-current':ui.cuTab===t[0]?'page':null,onclick:function(){ui.cuTab=t[0];ui.msg='';render(true)}},t[1])})))),
+    h('main',{class:'wrap page'},msgNode(),(mine.length||ui.cuTab==='rev'||ui.cuTab==='me')?page:h('div',{class:'card'},h('h2',{},'Пока нет учеников'),h('p',{class:'mute'},'Администратор закрепит за вами учеников, и они появятся здесь.'))));
+}
+function cuStud(mine){
+  return h('div',{class:'cols'},mine.map(function(s){
+    var up=DB.sessions.filter(function(x){return x.studentId===s.id&&x.status==='planned'}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})[0];
+    var open=DB.homework.filter(function(x){return x.studentId===s.id&&!x.done}).length,ts=DB.tests.filter(function(t){return t.studentId===s.id}),last=ts[ts.length-1];
+    var ta=h('textarea',{placeholder:'Комментарий, который увидит ученик'});ta.value=s.note||'';
+    return h('div',{class:'card'},h('h2',{},s.name+' · '+s.grade+' класс'),
+      h('div',{class:'kv'},h('span',{},'Следующее: '+(up?fdate(up.date)+' '+up.time+' · '+subName(up.subjectId):'нет')),h('span',{},'Открытых заданий: '+open),h('span',{},'Последний тест: '+(last?last.score+'/'+last.max:'—')),
+        h('span',{},s.paidUntil&&s.paidUntil>=dstr(0)?'Подписка до '+fdate(s.paidUntil):'Подписка не активна')),
+      h('label',{class:'fl'},h('span',{},'Заметка для ученика'),ta),
+      h('div',{class:'row',style:'margin-top:8px'},h('button',{class:'cb2 sm',type:'button',onclick:function(){s.note=ta.value.slice(0,500);ui.msg='Заметка сохранена';commit()}},'Сохранить')))}));
+}
+function cuSched(mine){
+  var ids=mine.map(function(s){return s.id});
+  var l=DB.sessions.filter(function(x){return ids.indexOf(x.studentId)>=0}).sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)});
+  return h('div',{class:'card'},h('h2',{},'Занятия моих учеников'),tbl([['Когда',function(x){return fdate(x.date)+' '+x.time}],['Ученик',function(x){return sName(x.studentId)}],['Консультант',function(x){return cName(x.consultantId)}],['Предмет',function(x){return subName(x.subjectId)}],['Статус',statusCtl]],l));
+}
+function cuHw(mine){
+  var ids=mine.map(function(s){return s.id}),l=DB.homework.filter(function(x){return ids.indexOf(x.studentId)>=0}).sort(function(a,b){return a.due.localeCompare(b.due)});
+  return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Новое задание'),form([{k:'st',l:'Ученик',t:'select',opts:mine.map(function(s){return [s.id,s.name]})},{k:'t',l:'Задание',req:1},{k:'d',l:'Срок',t:'date',req:1,v:dstr(3),min:dstr(0)}],'Выдать',
+    function(v){DB.homework.push({id:uid(),studentId:v.st,title:v.t.slice(0,160),due:v.d,done:false});commit()})),
+    h('div',{class:'card'},h('h2',{},'Выданные'),tbl([['Ученик',function(x){return sName(x.studentId)}],['Задание',function(x){return x.title}],['Срок',function(x){return fdate(x.due)}],['Статус',function(x){return h('span',{class:'tag'},x.done?'сдано':'в работе')}],
+      ['',function(x){return twoStep('Удалить',function(){DB.homework=DB.homework.filter(function(y){return y.id!==x.id});commit()},'cb2 sm bad')}]],l)));
+}
+function cuRes(mine){
+  var ids=mine.map(function(s){return s.id}),l=DB.tests.filter(function(x){return ids.indexOf(x.studentId)>=0}).sort(function(a,b){return b.date.localeCompare(a.date)});
+  return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Записать результат'),form([{k:'st',l:'Ученик',t:'select',opts:mine.map(function(s){return [s.id,s.name]})},{k:'sub',l:'Предмет',t:'select',opts:DB.subjects.map(function(s){return [s.id,s.name]})},{k:'t',l:'Название теста',req:1},{k:'sc',l:'Баллов',t:'number',req:1,min:0},{k:'mx',l:'Из',t:'number',req:1,min:1,v:25}],'Записать',
+    function(v){var sc=Number(v.sc),mx=Number(v.mx);if(!(mx>0)||sc<0||sc>mx){ui.msg='Баллов не может быть больше максимума';return render(true)}DB.tests.push({id:uid(),studentId:v.st,subjectId:v.sub,title:v.t.slice(0,80),score:sc,max:mx,date:dstr(0)});ui.msg='';commit()})),
+    h('div',{class:'card'},h('h2',{},'Результаты'),tbl([['Дата',function(x){return fdate(x.date)}],['Ученик',function(x){return sName(x.studentId)}],['Предмет',function(x){return subName(x.subjectId)}],['Тест',function(x){return x.title}],['Баллы',function(x){return x.score+'/'+x.max}]],l)));
+}
+
+/* ================= 5. УЧЕНИК ================= */
+var STT=[['home','Главная','🏠'],['cat','Каталог','🔎'],['sch','Занятия','📅'],['hw','ДЗ','✏️'],['prog','Прогресс','📈'],['ment','Пробник','📝'],['fav','Избранное','⭐'],['note','Уведомления','🔔']];
+function viewStudent(me){
+  ui.role='st';
+  var page=({home:stHome,cat:stCat,sch:stSch,hw:stHw,prog:stProg,ment:stMock,fav:stFav,note:stNote,me:stMe})[ui.stTab](me);
+  return h('div',{class:'st'},
+    h('header',{class:'hdr full'},h('div',{class:'wrap',style:'max-width:760px'},h('div',{class:'brand'},'Peer',h('b',{},'Up')),
+      h('button',{class:'ic',type:'button','aria-label':'Профиль',onclick:function(){ui.stTab='me';render(true)}},'👤'),
+      h('button',{class:'ic',type:'button','aria-label':'Избранное',onclick:function(){ui.stTab='fav';render(true)}},'⭐'),
+      h('button',{class:'ic',type:'button','aria-label':'Уведомления',onclick:function(){ui.stTab='note';render(true)}},'🔔'),
+      logoutBtn('ic'))),
+    h('div',{class:'page'},msgNode(),page),
+    h('nav',{class:'tabs','aria-label':'Разделы'},STT.slice(0,6).map(function(t){return h('button',{type:'button','aria-current':ui.stTab===t[0]?'page':null,onclick:function(){ui.stTab=t[0];ui.bookFor=null;ui.msg='';render(true)}},h('span',{},t[2]),t[1])})));
+}
+function upcoming(me){return DB.sessions.filter(function(x){return x.studentId===me.id&&x.status==='planned'}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})}
+function lessonStub(){ui.msg='Здесь будет вход в онлайн-урок (видеокомната). В прототипе не подключено.';render(true)}
+function sessCard(x){return h('div',{class:'card'},h('div',{class:'row'},h('b',{class:'grow'},subName(x.subjectId)),h('span',{class:'pill'},fdate(x.date)+' · '+x.time)),h('p',{class:'mute'},'Консультант: '+cName(x.consultantId)),
+  x.status==='planned'&&h('div',{class:'row',style:'margin-top:8px'},h('a',{class:'sb sm alt',style:'text-decoration:none;display:inline-block',href:roomUrl(x),target:'_blank',rel:'noopener'},'Войти в урок'),cancelBtn(x,'sb sm alt')))}
+function stHome(me){
+  var up=upcoming(me),hw=DB.homework.filter(function(x){return x.studentId===me.id&&!x.done}),tests=DB.tests.filter(function(t){return t.studentId===me.id}),last=tests[tests.length-1];
+  var doneS=DB.sessions.filter(function(x){return x.studentId===me.id&&x.status==='done'}).length,doneH=DB.homework.filter(function(x){return x.studentId===me.id&&x.done}).length;
+  var xp=doneS*10+doneH*5,lvl=Math.floor(xp/50)+1,into=xp%50;
+  return h('div',{class:'list'},h('h1',{},'Привет, '+me.name.split(' ')[0]+'!'),upEvents()[0]&&eventCard(upEvents()[0]),
+    h('div',{class:'card xp'},h('div',{class:'lvl'},String(lvl)),h('div',{style:'flex:1;min-width:0'},h('b',{},'Уровень '+lvl),h('div',{class:'mute',style:'font-size:.85rem'},'Ещё '+(50-into)+' очков до следующего. Занятие +10, задание +5'),h('div',{class:'bar',style:'margin-top:6px'},h('i',{style:'width:'+(into*2)+'%'})))),
+    me.note&&h('div',{class:'card'},h('h2',{},'От куратора'),h('p',{},me.note)),
+    !(me.paidUntil&&me.paidUntil>=dstr(0))&&h('div',{class:'warn'},'Подписка не активна. Чтобы записываться на занятия, напишите администратору.'),
+    up[0]?h('div',{class:'card hot'},h('p',{style:'opacity:.85'},'Ближайшее занятие'),h('h2',{style:'margin:4px 0'},subName(up[0].subjectId)),h('p',{},fdate(up[0].date)+' в '+up[0].time+' · '+cName(up[0].consultantId)),
+      h('button',{class:'sb',type:'button',style:'margin-top:10px',onclick:lessonStub},'Войти в урок')):
+      h('div',{class:'card'},h('h2',{},'Занятий пока нет'),h('p',{class:'mute'},'Выбери консультанта и запишись.'),h('button',{class:'sb',type:'button',style:'margin-top:10px',onclick:function(){ui.stTab='cat';render(true)}},'Открыть каталог')),
+    h('div',{class:'card'},h('h2',{},'Домашние задания'),hw.length?hw.slice(0,3).map(function(x){return h('p',{},'• '+x.title+' · до '+fdate(x.due))}):h('p',{class:'mute'},'Всё сдано 🎉')),
+    last&&h('div',{class:'card'},h('h2',{},'Последний результат'),h('p',{},subName(last.subjectId)+': '+last.score+' из '+last.max),h('div',{class:'bar'},h('i',{style:'width:'+Math.round(last.score/last.max*100)+'%'}))),h('div',{class:'card'},h('h2',{},'Отзыв о PeerUp'),h('p',{class:'mute'},'Поделись, как проходят занятия. Отзыв проверит администратор.'),h('button',{class:'sb ghost sm',type:'button',style:'margin-top:8px',onclick:function(){ui.stTab='me';render(true)}},'Оставить отзыв')));
+}
+function consCard(c,me){
+  var fav=!!(DB.favs[me.id]&&DB.favs[me.id][c.id]),paid=me.paidUntil&&me.paidUntil>=dstr(0);
+  var days=(c.avail||[]).map(function(a){return a.dow}).filter(function(x,i,arr){return arr.indexOf(x)===i}).sort(function(a,b){return (a+6)%7-(b+6)%7}).map(function(x){return DOW[x]}).join(', ');
+  var card=h('div',{class:'card cons'},h('div',{class:'row'},avatar(c,'ava'),h('div',{class:'grow'},h('b',{},c.name),h('div',{class:'chips'},c.subs.map(function(id){return h('span',{class:'pill'},subName(id))}))),
+    h('button',{class:'ic',type:'button','aria-label':'В избранное',onclick:function(){DB.favs[me.id]=DB.favs[me.id]||{};DB.favs[me.id][c.id]=!fav;commit()}},fav?'★':'☆')),
+    h('p',{class:'mute'},c.bio),h('p',{class:'mute',style:'font-size:.88rem'},days?'Свободные дни: '+days:'Пока нет свободных слотов'),
+    h('div',{class:'row'},h('button',{class:'sb',type:'button',disabled:paid&&days?null:true,onclick:function(){ui.bookFor=ui.bookFor===c.id?null:c.id;render(true)}},'Записаться'),!paid&&h('span',{class:'mute',style:'font-size:.85rem'},'Нужна активная подписка')));
+  if(ui.bookFor===c.id&&paid){
+    var d=h('input',{type:'date',value:dstr(1),min:dstr(0),max:me.paidUntil,required:true}),t=h('select',{required:true}),s=h('select',{},c.subs.map(function(id){return h('option',{value:id},subName(id))}));
+    var er=h('div',{class:'warn',hidden:true}),go=h('button',{class:'sb alt',type:'submit'},'Записаться');
+    function fill(){var l=d.value?freeTimes(c,d.value,me):[];t.replaceChildren.apply(t,l.length?l.map(function(x){return h('option',{value:x},x)}):[h('option',{value:''},'нет свободного времени')]);go.disabled=!l.length;er.hidden=!!l.length;er.textContent=l.length?'':'В этот день нет свободных слотов. Выбери другую дату.'}
+    d.addEventListener('change',fill);fill();
+    card.append(h('form',{class:'list',onsubmit:function(e){e.preventDefault();
+      if(d.value<dstr(0)||d.value>me.paidUntil){er.hidden=false;er.textContent='Дата должна быть в пределах подписки (до '+fdate(me.paidUntil)+')';return}
+      if(!t.value||conflict(c.id,d.value,t.value,me.id)){er.hidden=false;er.textContent='Это время уже занято. Выбери другое.';return}
+      DB.sessions.push({id:uid(),studentId:me.id,consultantId:c.id,subjectId:s.value,date:d.value,time:t.value,status:'planned'});ui.bookFor=null;ui.stTab='sch';ui.msg='Ты записан(а) на занятие';commit()}},
+      h('label',{class:'fl'},h('span',{},'Предмет'),s),h('label',{class:'fl'},h('span',{},'Дата'),d),h('label',{class:'fl'},h('span',{},'Свободное время'),t),er,go));
+  }
+  return card;
+}
+function stCat(me){
+  var list=h('div',{class:'list'});
+  function draw(){
+    var q=ui.q.toLowerCase(),res=DB.consultants.filter(function(c){return c.published&&c.status==='active'&&(!ui.stSubj||c.subs.indexOf(ui.stSubj)>=0)&&(!q||c.name.toLowerCase().indexOf(q)>=0||c.bio.toLowerCase().indexOf(q)>=0)});
+    list.replaceChildren.apply(list,res.length?res.map(function(c){return consCard(c,me)}):[h('div',{class:'card mute'},'Никого не нашли. Попробуй другой предмет.')]);
+  }
+  var search=h('input',{type:'search',placeholder:'Поиск по имени',value:ui.q});search.addEventListener('input',function(){ui.q=search.value;draw()});
+  var out=h('div',{class:'list'},h('h1',{},'Консультанты'),search,
+    h('div',{class:'chips'},[['','Все']].concat(DB.subjects.map(function(s){return [s.id,s.name]})).map(function(o){return h('button',{type:'button','aria-pressed':String(ui.stSubj===o[0]),onclick:function(){ui.stSubj=o[0];render(true)}},o[1])})),list);
+  draw();return out;
+}
+function stSch(me){
+  var up=upcoming(me),past=DB.sessions.filter(function(x){return x.studentId===me.id&&x.status==='done'}).sort(function(a,b){return b.date.localeCompare(a.date)});
+  return h('div',{class:'list'},h('h1',{},'Занятия'),h('h2',{},'Предстоящие'),up.length?up.map(sessCard):h('div',{class:'card mute'},'Пока нет записей.'),h('h2',{},'История'),past.length?past.map(sessCard):h('div',{class:'card mute'},'Проведённых занятий ещё нет.'));
+}
+function stHw(me){
+  var l=DB.homework.filter(function(x){return x.studentId===me.id});
+  return h('div',{class:'list'},h('h1',{},'Домашние задания'),l.length?l.map(function(x){var cb=h('input',{type:'checkbox'});cb.checked=x.done;cb.addEventListener('change',function(){x.done=cb.checked;commit()});
+    return h('label',{class:'card hw'},cb,h('div',{class:x.done?'done':''},h('b',{},x.title),h('div',{class:'mute'},'до '+fdate(x.due))))}):h('div',{class:'card mute'},'Заданий нет.'));
+}
+function stProg(me){
+  var tests=DB.tests.filter(function(t){return t.studentId===me.id}).sort(function(a,b){return a.date.localeCompare(b.date)});
+  var doneS=DB.sessions.filter(function(x){return x.studentId===me.id&&x.status==='done'}).length,hwAll=DB.homework.filter(function(x){return x.studentId===me.id}),hwDone=hwAll.filter(function(x){return x.done}).length;
+  function p(t){return Math.round(t.score/t.max*100)}
+  var avg=tests.length?Math.round(tests.reduce(function(a,t){return a+p(t)},0)/tests.length):null,best=tests.reduce(function(a,t){return Math.max(a,p(t))},0);
+  var goals=me.goals=me.goals||{};
+  var bySub=DB.subjects.map(function(s){return {s:s,ts:tests.filter(function(t){return t.subjectId===s.id})}}).filter(function(x){return x.ts.length||goals[x.s.id]});
+  var grew=bySub.some(function(x){return x.ts.length>1&&p(x.ts[x.ts.length-1])-p(x.ts[0])>=10});
+  var badges=[['🎯','Первое занятие',doneS>=1],['📚','5 занятий',doneS>=5],['✅','5 заданий сдано',hwDone>=5],['🏆','Тест на 80%+',best>=80],['📈','Рост на 10%+',grew],['⭐','Есть любимый консультант',Object.keys(DB.favs[me.id]||{}).some(function(k){return DB.favs[me.id][k]})]];
+  var weak=bySub.filter(function(x){return x.ts.length}).sort(function(a,b){return p(a.ts[a.ts.length-1])-p(b.ts[b.ts.length-1])})[0];
+  return h('div',{class:'list'},h('h1',{},'Мой прогресс'),
+    h('div',{class:'tiles'},[['Занятий',String(doneS)],['Заданий сдано',hwAll.length?hwDone+' из '+hwAll.length:'—'],['Средний результат',avg==null?'—':avg+'%']].map(function(x){return h('div',{class:'card tile'},h('span',{class:'mute'},x[0]),h('b',{},x[1]))})),
+    weak&&bySub.length>1?h('div',{class:'card'},h('h2',{},'На что обратить внимание'),h('p',{},'Самый низкий последний результат: '+weak.s.name+' ('+p(weak.ts[weak.ts.length-1])+'%). Обсуди с куратором, что повторить.')):null,
+    bySub.length?bySub.map(function(x){
+      var vals=x.ts.map(p),last=vals.length?vals[vals.length-1]:null,prev=vals.length>1?vals[vals.length-2]:null,g=goals[x.s.id]||0;
+      var sel=h('select',{'aria-label':'Цель по предмету'},[h('option',{value:'0'},'Без цели')].concat([60,70,80,90,100].map(function(v){return h('option',{value:String(v)},'Цель '+v+'%')})));sel.value=String(g);
+      sel.addEventListener('change',function(){goals[x.s.id]=Number(sel.value);if(!goals[x.s.id])delete goals[x.s.id];commit()});
+      return h('div',{class:'card'},h('div',{class:'row'},h('h2',{class:'grow',style:'margin:0'},x.s.name),last!=null&&h('b',{style:'font-size:1.4rem'},last+'%'),prev!=null&&h('span',{class:'pill'},(last-prev>=0?'+':'')+(last-prev)+'%')),
+        vals.length?spark(vals,300,70):h('p',{class:'mute'},'Результатов по предмету пока нет.'),
+        h('div',{class:'row',style:'margin-top:8px'},sel),
+        g&&last!=null?h('div',{style:'margin-top:8px'},h('div',{class:'bar'},h('i',{style:'width:'+Math.min(100,Math.round(last/g*100))+'%'})),h('p',{class:'mute',style:'font-size:.88rem'},last>=g?'Цель достигнута 🎉':'До цели осталось '+(g-last)+'%')):null,
+        ts2(x.ts))}):h('div',{class:'card mute'},'Результаты тестов появятся, когда куратор запишет первый. Цель по предмету можно поставить и сейчас после первого теста.'),
+    h('div',{class:'card'},h('h2',{},'Достижения'),h('div',{class:'badges'},badges.map(function(b){return h('div',{class:'badge2'+(b[2]?'':' off')},h('span',{},b[0]),h('b',{},b[1]))}))));
+  function ts2(ts){return ts.length?h('div',{class:'mute',style:'font-size:.85rem;margin-top:6px'},ts.slice(-3).map(function(t){return t.title+': '+t.score+'/'+t.max}).join(' · ')):null}
+}
+function stFav(me){
+  var f=DB.favs[me.id]||{},l=DB.consultants.filter(function(c){return f[c.id]&&c.published&&c.status==='active'});
+  return h('div',{class:'list'},h('h1',{},'Избранное'),l.length?l.map(function(c){return consCard(c,me)}):h('div',{class:'card mute'},'Отмечай консультантов звёздочкой в каталоге.'));
+}
+function stNote(me){
+  var n=[];upcoming(me).filter(function(x){return x.date<=dstr(2)}).forEach(function(x){n.push('Скоро занятие: '+subName(x.subjectId)+', '+fdate(x.date)+' в '+x.time)});
+  DB.homework.filter(function(x){return x.studentId===me.id&&!x.done&&x.due<=dstr(3)}).forEach(function(x){n.push('Скоро срок: '+x.title)});
+  var tg=safeHandle(DB.settings.telegram),ev=upEvents();
+  return h('div',{class:'list'},h('h1',{},'Уведомления'),n.length?n.map(function(x){return h('div',{class:'card'},x)}):h('div',{class:'card mute'},'Пока тихо.'),
+    ev.length?h('h2',{},'События'):null,ev.map(eventCard),
+    h('div',{class:'card'},h('h2',{},'Поддержка'),tg?h('a',{class:'sb sm',style:'text-decoration:none;display:inline-block',href:'https://t.me/'+tg,target:'_blank',rel:'noopener'},'Написать в Telegram'):h('p',{class:'mute'},'Контакт поддержки появится, когда его добавят в админке.')));
+}
+function safeHttps(v){v=S(v).trim();return /^https:\/\/[^\s]+$/.test(v)?v:''}
+var DOW=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+function dowOf(d){return new Date(d+'T00:00:00Z').getUTCDay()}
+function readImage(file,maxW,q){return new Promise(function(res,rej){
+  if(!file||!/^image\/(jpeg|png|webp)$/.test(file.type))return rej(new Error('Подойдёт фото JPG, PNG или WebP'));
+  if(file.size>8*1024*1024)return rej(new Error('Файл больше 8 МБ'));
+  var fr=new FileReader();fr.onerror=function(){rej(new Error('Не удалось прочитать файл'))};
+  fr.onload=function(){var im=new Image();im.onerror=function(){rej(new Error('Не удалось открыть фото'))};
+    im.onload=function(){var sc=Math.min(1,maxW/im.width),w=Math.max(1,Math.round(im.width*sc)),hh=Math.max(1,Math.round(im.height*sc)),c=document.createElement('canvas');c.width=w;c.height=hh;
+      var cx=c.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,w,hh);cx.drawImage(im,0,0,w,hh);res(c.toDataURL('image/jpeg',q))};im.src=fr.result};
+  fr.readAsDataURL(file)})}
+function avatar(ent,cls){return ent&&ent.photo?h('img',{class:cls,src:ent.photo,alt:''}):h('div',{class:cls},initials(ent&&ent.name||ent&&ent.author||'?'))}
+function photoInput(ent,key,maxW,btnCls){
+  var inp=h('input',{type:'file',accept:'image/jpeg,image/png,image/webp','aria-label':'Загрузить фото'}),note=h('span',{class:'mute',style:'font-size:.82rem'},'');
+  inp.addEventListener('change',function(){var f=inp.files[0];if(!f)return;note.textContent='Загружаю…';readImage(f,maxW,.8).then(function(d){ent[key]=d;commit()}).catch(function(e){note.textContent=e.message;inp.value=''})});
+  return h('div',{class:'row'},ent[key]?h('img',{class:'thumb',src:ent[key],alt:''}):null,inp,ent[key]&&h('button',{type:'button',class:btnCls+' sm ghost',onclick:function(){ent[key]='';commit()}},'Убрать фото'),note);
+}
+function lessonPay(x){var c=by(DB.consultants,x.consultantId);if(!c)return 0;if(x.status==='done')return c.rate;if(x.status==='missed'&&x.missedBy==='student'&&DB.settings.payNoShow)return c.rate;return 0}
+var MONTHS=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+function periodRange(type,anchor){
+  var d=new Date(anchor+'T00:00:00Z'),from,to,label,key;
+  if(type==='week'){var dw=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-dw);from=d.toISOString().slice(0,10);d.setUTCDate(d.getUTCDate()+6);to=d.toISOString().slice(0,10);label=fdate(from)+' – '+fdate(to);key='w'+from}
+  else{var y=d.getUTCFullYear(),m=d.getUTCMonth();from=new Date(Date.UTC(y,m,1)).toISOString().slice(0,10);to=new Date(Date.UTC(y,m+1,0)).toISOString().slice(0,10);label=MONTHS[m]+' '+y;key='m'+from.slice(0,7)}
+  return {type:type,from:from,to:to,label:label,key:key,factor:type==='week'?7/30:1};
+}
+function calc(r){
+  var st=DB.settings;
+  var rev=DB.payments.filter(function(p){return p.date>=r.from&&p.date<=r.to}).reduce(function(a,p){return a+p.amount},0);
+  var ss=DB.sessions.filter(function(x){return x.date>=r.from&&x.date<=r.to&&lessonPay(x)>0});
+  var cons=DB.consultants.map(function(c){var l=ss.filter(function(x){return x.consultantId===c.id});return {c:c,n:l.length,amt:l.reduce(function(a,x){return a+lessonPay(x)},0)}}).filter(function(x){return x.n>0});
+  var curs=DB.curators.map(function(k){var n=DB.students.filter(function(s){return s.curatorId===k.id&&s.paidUntil&&s.paidUntil>=r.from}).length;
+    var base=k.payModel==='fixed'?(k.payAmount||0):(k.payAmount||0)*n;return {k:k,n:n,amt:Math.round(base*r.factor)}});
+  var consT=cons.reduce(function(a,x){return a+x.amt},0),curT=curs.reduce(function(a,x){return a+x.amt},0);
+  var tax=Math.round(rev*(st.taxPct||0)/100),fixed=Math.round((st.fixedCosts||0)*r.factor),profit=rev-tax-consT-curT-fixed;
+  return {rev:rev,tax:tax,cons:cons,curs:curs,consT:consT,curT:curT,fixed:fixed,profit:profit}
+}
+function recalcPaid(id){
+  var st=by(DB.students,id);if(!st)return;
+  var ps=DB.payments.filter(function(p){return p.studentId===id}).sort(function(a,b){return a.date.localeCompare(b.date)}),end='';
+  ps.forEach(function(p){var base=end&&end>p.date?end:p.date,d=new Date(base+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+(p.days||30));end=d.toISOString().slice(0,10)});
+  st.paidUntil=end;
+}
+function statusCtl(x){
+  var sel=h('select',{'aria-label':'Статус занятия'},[['planned','Запланировано'],['done','Проведено'],['missed','Не проведено'],['cancelled','Отменено']].map(function(o){return h('option',{value:o[0]},o[1])}));sel.value=x.status;
+  sel.addEventListener('change',function(){x.status=sel.value;if(x.status==='missed'){x.missedBy=x.missedBy||'consultant'}else delete x.missedBy;log('Статус занятия '+sName(x.studentId)+' '+fdate(x.date)+': '+sel.value);commit()});
+  var out=[sel];
+  if(x.status==='missed'){var who=h('select',{'aria-label':'Причина'},[['consultant','Не вышел консультант'],['student','Не пришёл ученик'],['other','Другая причина']].map(function(o){return h('option',{value:o[0]},o[1])}));who.value=x.missedBy||'consultant';who.addEventListener('change',function(){x.missedBy=who.value;commit()});out.push(who)}
+  return h('div',{class:'row'},out);
+}
+function upEvents(){return DB.events.filter(function(e){return e.date>=dstr(0)}).sort(function(a,b){return (a.date+(a.time||'')).localeCompare(b.date+(b.time||''))})}
+function eventCard(e){
+  var l=safeHttps(e.link);
+  return h('article',{class:'ev'},e.banner&&h('img',{class:'banner',src:e.banner,alt:''}),h('div',{class:'evb'},h('span',{class:'evt'},S(e.type)+' · '+fdate(e.date)+(e.time?' · '+e.time:'')),h('h3',{},S(e.title)),e.text&&h('p',{},S(e.text)),l&&h('a',{class:'evl',href:l,target:'_blank',rel:'noopener'},'Подробнее')));
+}
+function eventsStrip(){var l=upEvents().slice(0,3);if(!l.length)return null;return h('section',{class:'evs'},h('div',{class:'evsh'},'Ближайшие события'),h('div',{class:'evg'},l.map(eventCard)))}
+function reviewForm(role,name,ref,by2,btn,photo){
+  var ta=h('textarea',{required:true,maxlength:'600',placeholder:'Как проходят занятия? Что нравится, что улучшить?'}),fi=h('input',{type:'file',accept:'image/jpeg,image/png,image/webp'}),
+      ck=h('input',{type:'checkbox',required:true}),note=h('div',{class:'mute',style:'font-size:.85rem'},'Сначала отзыв проверит администратор.');
+  return h('form',{class:'list',onsubmit:function(e){e.preventDefault();var text=ta.value.trim();if(!text)return;
+    var save=function(p){DB.reviews.push({id:uid(),author:name,role:role,text:text.slice(0,600),photo:p||'',status:'pending',by:by2,ref:ref,consent:true,date:dstr(0)});ui.msg='Спасибо! Отзыв отправлен на модерацию';commit()};
+    if(fi.files[0])readImage(fi.files[0],256,.8).then(save).catch(function(er){note.textContent=er.message});else save(photo||'')}},
+    h('label',{class:'fl'},h('span',{},'Твой отзыв'),ta),h('label',{class:'fl'},h('span',{},'Фото (необязательно, иначе возьмём фото из профиля)'),fi),
+    h('label',{class:'fl ck'},ck,h('span',{},'Согласен(а) на публикацию отзыва на сайте с моим именем и фото (для детей нужно согласие родителя)')),note,h('button',{class:btn,type:'submit'},'Отправить на модерацию'));
+}
+function myReviews(by2,ref,tagCls){
+  var l=DB.reviews.filter(function(r){return r.by===by2&&r.ref===ref});if(!l.length)return null;
+  var lab={pending:'на модерации',approved:'опубликован',rejected:'отклонён'};
+  return h('div',{class:'list'},l.map(function(r){return h('div',{class:'card'},h('p',{},r.text),h('span',{class:tagCls},lab[r.status]||r.status))}));
+}
+function payCell(kind,refId,amount,r){
+  var rec=DB.payouts.filter(function(p){return p.kind===kind&&p.refId===refId&&p.key===r.key})[0];
+  if(rec)return h('div',{class:'row'},h('span',{class:'tag ok'},'выплачено '+fdate(rec.date)),rec.amount!==amount&&h('span',{class:'tag warn'},'сумма изменилась, было '+money(rec.amount)),
+    twoStep('Отменить отметку',function(){DB.payouts=DB.payouts.filter(function(p){return p.id!==rec.id});log('Отменена отметка выплаты: '+kind);commit()},'b sm bad'));
+  if(!amount)return h('span',{class:'sub'},'—');
+  return h('button',{class:'b sm',type:'button',onclick:function(){DB.payouts.push({id:uid(),kind:kind,refId:refId,key:r.key,amount:amount,date:dstr(0)});log('Выплата '+kind+' '+money(amount));commit()}},'Отметить выплаченным');
+}
+function adAcct(){
+  var st=DB.settings,a=ui.acct||(ui.acct={type:'month',anchor:dstr(0)}),r=periodRange(a.type,a.anchor),c=calc(r);
+  function pct(x){return c.rev?Math.round(x/c.rev*100):0}
+  var flow=[['Оплаты родителей',c.rev,'in'],['Налог (резерв '+st.taxPct+'%)',c.tax,'out'],['Консультантам (почасово)',c.consT,'out'],['Кураторам',c.curT,'out'],['Постоянные расходы',c.fixed,'out'],['Остаётся основателю',c.profit,'net']];
+  var ty=h('select',{},[['month','Месяц'],['week','Неделя']].map(function(o){return h('option',{value:o[0]},o[1])}));ty.value=a.type;ty.addEventListener('change',function(){a.type=ty.value;render(true)});
+  var da=h('input',{type:'date',value:a.anchor});da.addEventListener('change',function(){if(da.value){a.anchor=da.value;render(true)}});
+  var per={week:'еженедельно',month:'ежемесячно'};
+  return h('div',{},h('h1',{},'Бухгалтерия'),h('p',{class:'sub'},'Все правила и расчёты в открытом виде. Суммы считаются автоматически из оплат и статусов занятий.'),
+    h('div',{class:'panel'},h('h2',{},'Период: '+r.label),h('div',{class:'frm'},h('label',{class:'fl'},h('span',{},'Тип периода'),ty),h('label',{class:'fl'},h('span',{},'Любая дата внутри периода'),da))),
+    h('div',{class:'panel'},h('h2',{},'Куда уходят деньги'),flow.map(function(f){return h('div',{style:'margin-bottom:10px'},h('div',{class:'row'},h('span',{class:'grow'},f[0]),h('span',{class:'mono'},money(f[1])),h('span',{class:'tag'},pct(f[1])+'%')),
+      h('div',{class:'bar'},h('i',{style:'width:'+Math.max(0,Math.min(100,pct(f[1])))+'%'+(f[2]==='net'&&f[1]<0?';background:var(--ad-bad)':'')})))}),
+      c.profit<0&&h('p',{class:'sub'},'За период расходы больше выручки.')),
+    h('div',{class:'panel'},h('h2',{},'Консультанты: почасовая оплата, выплата '+per[st.consPeriod]),
+      tbl([['Консультант',function(x){return x.c.name}],['Занятий',function(x){return x.n}],['Ставка',function(x){return money(x.c.rate)}],['К выплате',function(x){return h('span',{class:'mono'},money(x.amt))}],['Статус',function(x){return payCell('consultant',x.c.id,x.amt,r)}]],c.cons,'За период нет оплачиваемых занятий.'),
+      h('p',{class:'sub',style:'margin-top:8px'},'Оплачивается каждое занятие со статусом «Проведено'+(st.payNoShow?'» и неявка ученика':'»')+'. Статус «Не проведено» не оплачивается'+(st.payNoShow?', кроме неявки ученика':'')+'.')),
+    h('div',{class:'panel'},h('h2',{},'Кураторы: выплата '+per[st.curPeriod]),
+      tbl([['Куратор',function(x){return x.k.name}],['Учеников с подпиской',function(x){return x.n}],
+        ['Схема',function(x){var m=h('select',{},[['perStudent','За каждого ученика'],['fixed','Фиксированная сумма']].map(function(o){return h('option',{value:o[0]},o[1])}));m.value=x.k.payModel;m.addEventListener('change',function(){x.k.payModel=m.value;commit()});
+          var n=h('input',{type:'number',min:'0',value:String(x.k.payAmount||0),style:'width:110px','aria-label':'Сумма в месяц'});n.addEventListener('change',function(){x.k.payAmount=Math.max(0,Number(n.value)||0);commit()});return h('div',{class:'row'},m,n,h('span',{class:'sub'},'₸/мес'))}],
+        ['К выплате',function(x){return h('span',{class:'mono'},money(x.amt))}],['Статус',function(x){return payCell('curator',x.k.id,x.amt,r)}]],c.curs,'Кураторов пока нет.'),
+      h('p',{class:'sub',style:'margin-top:8px'},'Сумма указана за месяц. Если выбрана неделя, считается доля 7/30. Демо-суммы замените на реальные.')),
+    h('div',{class:'panel'},h('h2',{},'Правила и ставки'),form([
+      {k:'cp',l:'Выплаты консультантам',t:'select',opts:[['week','Еженедельно'],['month','Ежемесячно']],v:st.consPeriod},{k:'kp',l:'Выплаты кураторам',t:'select',opts:[['month','Ежемесячно'],['week','Еженедельно']],v:st.curPeriod},
+      {k:'tx',l:'Налог, % от выручки',t:'number',min:0,max:100,v:st.taxPct},{k:'fc',l:'Постоянные расходы, ₸/мес',t:'number',min:0,v:st.fixedCosts},
+      {k:'ns',l:'Неявка ученика',t:'select',opts:[['0','Не оплачивать консультанту'],['1','Оплачивать консультанту']],v:st.payNoShow?'1':'0'}],'Сохранить правила',
+      function(v){st.consPeriod=v.cp;st.curPeriod=v.kp;st.taxPct=Math.min(100,Math.max(0,Number(v.tx)||0));st.fixedCosts=Math.max(0,Number(v.fc)||0);st.payNoShow=v.ns==='1';log('Изменены правила бухгалтерии');ui.msg='Правила сохранены';commit()}),
+      h('p',{class:'sub',style:'margin-top:8px'},'Ставка налога в демо — 4%, как для упрощённого режима. Точную ставку и режим подтвердите у бухгалтера. Это учёт для управления, не налоговая отчётность.')),
+    h('div',{class:'panel'},h('h2',{},'Как идут деньги'),h('ol',{style:'margin:0;padding-left:20px;display:grid;gap:6px'},[
+      'Родитель оплачивает подписку на ваш Kaspi/ИП. Вы записываете оплату в «Платежах», подписка ученика продлевается.',
+      'Из оплат откладывается налог (резерв).',
+      'Консультанту платится ставка за каждое проведённое занятие, поэтому статусы в расписании должны быть верными.',
+      'Куратору платится фиксированная сумма или сумма за каждого ученика с активной подпиской.',
+      'Из оставшегося покрываются постоянные расходы (реклама, сервисы). Остаток это ваша прибыль.',
+      'После реального перевода нажмите «Отметить выплаченным», так видно, кому уже заплатили.'].map(function(x){return h('li',{},x)}))));
+}
+function cuRev(me){
+  return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Оставить отзыв'),h('p',{class:'mute',style:'margin-bottom:10px'},'Расскажите, как работает проект. Отзыв сначала проверит администратор.'),reviewForm('Куратор',me.name,me.id,'curator','cb2',me.photo)),
+    myReviews('curator',me.id,'tag'));
+}
+function cuMe(me){
+  return h('div',{class:'card'},h('div',{class:'row'},avatar(me,'cuava'),h('div',{},h('h2',{style:'margin:0'},me.name),h('p',{class:'mute'},'Куратор'))),
+    h('p',{class:'mute',style:'margin:12px 0 6px'},'Моё фото (видно администратору и в отзывах):'),photoInput(me,'photo',256,'cb2'));
+}
+function stMe(me){
+  var k=by(DB.curators,me.curatorId),paid=me.paidUntil&&me.paidUntil>=dstr(0);
+  return h('div',{class:'list'},h('h1',{},'Мой профиль'),h('div',{class:'card'},h('div',{class:'row'},avatar(me,'ava'),h('div',{},h('b',{},me.name),h('div',{class:'mute'},me.grade+' класс'))),
+    h('p',{class:'mute',style:'margin:12px 0 6px'},'Моё фото:'),photoInput(me,'photo',256,'sb')),
+    h('div',{class:'card'},h('h2',{},'Мои данные'),h('p',{},'Куратор: '+(k?k.name:'пока не назначен')),h('p',{},paid?'Подписка до '+fdate(me.paidUntil):'Подписка не активна')),
+    h('div',{class:'card'},h('h2',{},'Оставить отзыв'),reviewForm('Ученик',me.name,me.id,'student','sb',me.photo)),myReviews('student',me.id,'pill'));
+}
+function freeTimes(c,d,me){
+  var w=dowOf(d),n=new Date(),nowT=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2);
+  return (c.avail||[]).filter(function(a){return a.dow===w}).map(function(a){return a.time}).filter(function(t,i,arr){return arr.indexOf(t)===i}).sort().filter(function(t){return !conflict(c.id,d,t,me.id)&&(d!==dstr(0)||t>nowT)});
+}
+function spark(vals,w,hh){
+  var ns='http://www.w3.org/2000/svg',s=document.createElementNS(ns,'svg');s.setAttribute('viewBox','0 0 '+w+' '+hh);s.setAttribute('width','100%');s.setAttribute('height',String(hh));s.setAttribute('role','img');s.setAttribute('aria-label','Динамика результатов');s.setAttribute('class','spk');
+  var n=vals.length;if(!n)return s;
+  var pts=vals.map(function(v,i){return [n===1?w/2:8+i*(w-16)/(n-1),hh-8-(hh-16)*v/100]});
+  var p=document.createElementNS(ns,'polyline');p.setAttribute('points',pts.map(function(q){return q[0]+','+q[1]}).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke','currentColor');p.setAttribute('stroke-width','3');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');s.append(p);
+  pts.forEach(function(q){var c=document.createElementNS(ns,'circle');c.setAttribute('cx',String(q[0]));c.setAttribute('cy',String(q[1]));c.setAttribute('r','4.5');c.setAttribute('fill','currentColor');s.append(c)});
+  return s;
+}
+
+
+/* ===== v3: родитель, консультант, банк ЕНТ, правила отмены, оферта ===== */
+function cmpSess(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}
+function roomUrl(x){var c=by(DB.consultants,x.consultantId);return safeHttps(c&&c.room)||'https://meet.jit.si/PeerUp-'+x.id+x.date.replace(/-/g,'')}
+function cancelBtn(x,cls){return twoStep('Отменить',function(){var hrs=(new Date(x.date+'T'+x.time+':00')-Date.now())/36e5,free=hrs>=DB.settings.cancelHours;
+  x.status=free?'cancelled':'missed';if(!free)x.missedBy='student';log('Отмена занятия '+sName(x.studentId)+' '+fdate(x.date)+(free?' (в срок)':' (поздно)'));
+  ui.msg=free?'Занятие отменено бесплатно.':'Отмена позже чем за '+DB.settings.cancelHours+' ч: по правилам занятие считается неявкой.';commit()},cls)}
+function cabShell(sub,tabs,key,page){return h('div',{class:'cu'},h('header',{class:'hdr full'},h('div',{class:'wrap'},h('div',{class:'brand'},S(DB.settings.brand),h('small',{},sub)),logoutBtn('cb2 ghost sm')),
+  h('div',{class:'wrap'},h('div',{class:'tabs'},tabs.map(t=>h('button',{type:'button','aria-current':ui[key]===t[0]?'page':null,onclick:()=>{ui[key]=t[0];ui.msg='';render(true)}},t[1]))))),
+  h('main',{class:'wrap page'},msgNode(),page))}
+var PAT=[['kids','Дети'],['pay','Оплата'],['rules','Правила и контакты']];
+function viewParent(me){ui.role='cu';ui.paTab=ui.paTab||'kids';var kids=DB.students.filter(s=>s.parentId===me.id);
+  return cabShell('кабинет родителя · '+me.name,PAT,'paTab',{kids:()=>pKids(kids),pay:()=>pPay(kids),rules:()=>pRules(me)}[ui.paTab]())}
+function pKids(kids){
+  if(!kids.length)return h('div',{class:'card'},h('h2',{},'Пока нет детей'),h('p',{class:'mute'},'Администратор привяжет ребёнка к вашему кабинету.'));
+  return h('div',{class:'page',style:'padding:0'},kids.map(s=>{var k=by(DB.curators,s.curatorId),paid=s.paidUntil&&s.paidUntil>=dstr(0),
+    up=DB.sessions.filter(x=>x.studentId===s.id&&x.status==='planned').sort(cmpSess),hw=DB.homework.filter(x=>x.studentId===s.id&&!x.done),
+    ts=DB.tests.filter(x=>x.studentId===s.id).sort((a,b)=>a.date.localeCompare(b.date)),pc=t=>Math.round(100*t.score/t.max);
+    return h('div',{class:'card'},h('div',{class:'row'},avatar(s,'cuava'),h('div',{},h('h2',{style:'margin:0'},s.name+' · '+s.grade+' класс'),h('p',{class:'mute'},'Куратор: '+(k?k.name:'не назначен')))),
+      h('div',{class:'kv'},h('span',{},paid?'Подписка до '+fdate(s.paidUntil):'Подписка не активна'),h('span',{},'Заданий в работе: '+hw.length)),
+      h('h3',{},'Ближайшие занятия'),up.length?up.map(x=>h('div',{class:'row',style:'margin:6px 0'},h('span',{class:'tag'},fdate(x.date)+' '+x.time),h('span',{class:'grow'},subName(x.subjectId)+' · '+cName(x.consultantId)),
+        h('a',{class:'cb2 sm ghost',style:'text-decoration:none',href:roomUrl(x),target:'_blank',rel:'noopener'},'Урок'),cancelBtn(x,'cb2 sm bad'))):h('p',{class:'mute'},'Нет запланированных.'),
+      h('h3',{style:'margin-top:12px'},'Результаты'),ts.length?[h('div',{style:'color:var(--cu-acc)'},spark(ts.map(pc),300,60)),
+        tbl([['Дата',t=>fdate(t.date)],['Тест',t=>t.title],['Предмет',t=>subName(t.subjectId)],['Балл',t=>t.score+'/'+t.max+' ('+pc(t)+'%)']],ts.slice().reverse())]:h('p',{class:'mute'},'Результатов пока нет.'))}))}
+function pPay(kids){var ids=kids.map(s=>s.id),st=DB.settings,tg=safeHandle(st.telegram),
+  ps=DB.payments.filter(p=>ids.indexOf(p.studentId)>=0).sort((a,b)=>b.date.localeCompare(a.date));
+  return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Подписка'),kids.map(s=>h('p',{},s.name+': '+(s.paidUntil&&s.paidUntil>=dstr(0)?'оплачено до '+fdate(s.paidUntil):'не оплачено'))),
+    h('p',{class:'mute'},'Групповое '+money(st.priceGroup)+', индивидуальное '+money(st.priceIndiv)+'. Оплата переводом, реквизиты и подтверждение выдаёт администратор.'),
+    tg&&h('a',{class:'cb2 sm',style:'text-decoration:none;display:inline-block',href:'https://t.me/'+tg,target:'_blank',rel:'noopener'},'Написать в Telegram')),
+    h('div',{class:'card'},h('h2',{},'История оплат'),tbl([['Дата',p=>fdate(p.date)],['Ребёнок',p=>sName(p.studentId)],['Сумма',p=>money(p.amount)],['Способ',p=>p.method]],ps,'Оплат пока нет.')))}
+function pRules(me){var st=DB.settings;return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Отмена и возврат'),h('p',{},'Бесплатная отмена: не позднее чем за '+st.cancelHours+' ч до начала.'),h('p',{class:'mute',style:'margin:6px 0 10px'},st.refundText),
+    h('button',{class:'cb2 ghost sm',type:'button',onclick:()=>{location.hash='offer'}},'Публичная оферта')),
+  h('div',{class:'card'},h('h2',{},'Контакты для напоминаний'),h('p',{class:'mute'},'Напоминания о занятиях отправляет администратор в Telegram или WhatsApp.'),
+    form([{k:'tg',l:'Telegram (@имя)',v:me.tg||''},{k:'wa',l:'WhatsApp (номер)',v:me.wa||'',ph:'77011234567'}],'Сохранить',v=>{me.tg=safeHandle(v.tg);me.wa=v.wa.replace(/\D/g,'');ui.msg='Сохранено';commit()})))}
+var COT=[['sch','Расписание'],['slots','Слоты'],['earn','Заработок'],['me','Профиль и урок']],TIMES=[],DORD=[1,2,3,4,5,6,0];
+for(var ti=8;ti<=21;ti++)TIMES.push((ti<10?'0':'')+ti+':00');
+function viewConsultant(me){ui.role='cu';ui.coTab=ui.coTab||'sch';return cabShell('кабинет консультанта · '+me.name,COT,'coTab',{sch:coSch,slots:coSlots,earn:coEarn,me:coMe}[ui.coTab](me))}
+function coSch(me){var l=DB.sessions.filter(x=>x.consultantId===me.id).sort((a,b)=>cmpSess(b,a));
+  return h('div',{class:'card'},h('h2',{},'Мои занятия'),tbl([['Когда',x=>fdate(x.date)+' '+x.time],['Ученик',x=>sName(x.studentId)],['Предмет',x=>subName(x.subjectId)],['Статус',statusCtl],
+    ['',x=>x.status==='planned'?h('a',{class:'cb2 sm ghost',style:'text-decoration:none',href:roomUrl(x),target:'_blank',rel:'noopener'},'Урок'):'']],l,'Занятий пока нет.'))}
+function coSlots(me){var has=(d,t)=>me.avail.some(a=>a.dow===d&&a.time===t);
+  return h('div',{class:'card'},h('h2',{},'Мои свободные слоты'),h('p',{class:'mute'},'Отметьте часы, когда готовы вести занятия каждую неделю. Ученики записываются только на отмеченные.'),
+    h('div',{class:'tw'},h('table',{},h('thead',{},h('tr',{},h('th',{},''),DORD.map(d=>h('th',{},DOW[d])))),h('tbody',{},TIMES.map(t=>h('tr',{},h('td',{},t),DORD.map(d=>{
+      var c=h('input',{type:'checkbox','aria-label':DOW[d]+' '+t});c.checked=has(d,t);
+      c.addEventListener('change',()=>{me.avail=me.avail.filter(a=>!(a.dow===d&&a.time===t));if(c.checked)me.avail.push({dow:d,time:t});commit()});return h('td',{},c)})))))))}
+function coEarn(me){var rows=['week','month'].map(t=>{var r=periodRange(t,dstr(0)),ls=DB.sessions.filter(x=>x.consultantId===me.id&&x.date>=r.from&&x.date<=r.to&&lessonPay(x)>0).sort(cmpSess),
+    rec=DB.payouts.filter(p=>p.kind==='consultant'&&p.refId===me.id&&p.key===r.key)[0];return {r:r,ls:ls,amt:ls.reduce((a,x)=>a+lessonPay(x),0),rec:rec}});
+  return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('h2',{},'Заработок'),
+    h('p',{class:'mute'},'Ставка '+money(me.rate)+' за проведённое занятие. Выплата '+(DB.settings.consPeriod==='week'?'еженедельно':'ежемесячно')+'. Запланировано: '+DB.sessions.filter(x=>x.consultantId===me.id&&x.status==='planned').length),
+    tbl([['Период',x=>x.r.label],['Занятий',x=>x.ls.length],['Сумма',x=>money(x.amt)],['Выплата',x=>x.rec?'выплачено '+fdate(x.rec.date):(x.amt?'ожидает':'—')]],rows)),
+    h('div',{class:'card'},h('h2',{},'Занятия за месяц'),tbl([['Дата',x=>fdate(x.date)+' '+x.time],['Ученик',x=>sName(x.studentId)],['Предмет',x=>subName(x.subjectId)],['Сумма',x=>money(lessonPay(x))]],rows[1].ls,'Оплачиваемых занятий пока нет.')))}
+function coMe(me){return h('div',{class:'page',style:'padding:0'},h('div',{class:'card'},h('div',{class:'row'},avatar(me,'cuava'),h('div',{},h('h2',{style:'margin:0'},me.name),h('p',{class:'mute'},'Консультант'))),
+    h('p',{class:'mute',style:'margin:12px 0 6px'},'Фото:'),photoInput(me,'photo',256,'cb2')),
+  h('div',{class:'card'},h('h2',{},'Ссылка на урок'),h('p',{class:'mute'},'Любая ссылка https (Google Meet, Zoom, Jitsi). Если пусто, комната Jitsi создаётся автоматически. Запись урока включайте в самой видеосвязи.'),
+    form([{k:'room',l:'Ссылка',v:me.room||'',ph:'https://…'}],'Сохранить',v=>{var u=v.room.trim();if(u&&!safeHttps(u)){ui.msg='Нужна ссылка, начинающаяся с https://';return render(true)}me.room=u;ui.msg='Сохранено';commit()})),
+  h('div',{class:'card'},h('h2',{},'О себе'),form([{k:'bio',l:'Описание',t:'area',v:me.bio,max:500}],'Сохранить',v=>{me.bio=v.bio;ui.msg='Сохранено';commit()})))}
+function stMock(me){var m=ui.mock,subs=DB.subjects.filter(s=>DB.bank.some(q=>q.subjectId===s.id));
+  if(!m)return h('div',{class:'list'},h('h1',{},'Пробник'),h('p',{class:'mute'},'До 10 вопросов из банка. Результат сам попадёт в «Прогресс».'),
+    subs.length?subs.map(s=>h('button',{class:'sb',type:'button',style:'margin:4px',onclick:()=>{ui.mock={subj:s.id,qs:DB.bank.filter(q=>q.subjectId===s.id).sort(()=>Math.random()-.5).slice(0,10),ans:{},done:false};render(true)}},s.name)):h('div',{class:'card mute'},'Банк вопросов пока пуст.'));
+  var sc=()=>m.qs.filter(q=>m.ans[q.id]===q.ans).length;
+  return h('div',{class:'list'},h('h1',{},'Пробник · '+subName(m.subj)),m.done&&h('div',{class:'card'},h('h2',{},'Результат: '+sc()+' из '+m.qs.length)),
+    m.qs.map((q,i)=>h('div',{class:'card'},h('b',{},(i+1)+'. '+q.q),q.opts.map((o,j)=>{var r=h('input',{type:'radio',name:'q'+q.id,disabled:m.done?true:null});r.checked=m.ans[q.id]===j;r.addEventListener('change',()=>{m.ans[q.id]=j});
+      return h('label',{style:'display:flex;gap:8px;margin:6px 0'+(m.done&&j===q.ans?';font-weight:800':'')},r,o+(m.done&&j===q.ans?' ✓':''))}))),
+    h('div',{class:'row'},!m.done&&h('button',{class:'sb',type:'button',onclick:()=>{DB.tests.push({id:uid(),studentId:me.id,subjectId:m.subj,title:'Пробник ЕНТ',score:sc(),max:m.qs.length,date:dstr(0)});m.done=true;log('Пробник: '+me.name);commit()}},'Завершить'),
+      h('button',{class:'sb alt',type:'button',onclick:()=>{ui.mock=null;render(true)}},m.done?'Новый пробник':'Выйти')))}
+function remindText(p){var ids=DB.students.filter(s=>s.parentId===p.id).map(s=>s.id),x=DB.sessions.filter(q=>ids.indexOf(q.studentId)>=0&&q.status==='planned'&&q.date>=dstr(0)).sort(cmpSess)[0];
+  return x?'Напоминание PeerUp: '+sName(x.studentId)+', '+subName(x.subjectId)+', '+fdate(x.date)+' в '+x.time+'. Урок: '+roomUrl(x):''}
+function remindLinks(p){var t=remindText(p),o=[];if(!t)return h('span',{class:'sub'},'нет занятий');
+  if(p.wa)o.push(h('a',{class:'b sm',style:'text-decoration:none',href:'https://wa.me/'+p.wa+'?text='+encodeURIComponent(t),target:'_blank',rel:'noopener'},'WhatsApp'));
+  if(p.tg)o.push(h('button',{class:'b sm',type:'button',onclick:()=>{try{navigator.clipboard.writeText(t)}catch(e){}window.open('https://t.me/'+p.tg,'_blank','noopener')}},'Telegram (текст скопируется)'));
+  return o.length?h('div',{class:'row'},o):h('span',{class:'sub'},'нет контакта')}
+function adPar(){var kids=p=>DB.students.filter(s=>s.parentId===p.id);
+  return h('div',{},h('h1',{},'Родители и доступы'),
+    h('div',{class:'panel'},h('h2',{},'Родители'),tbl([['Родитель',p=>p.name],['Дети',p=>kids(p).map(k=>k.name).join(', ')||'—'],
+      ['Оплачено',p=>h('span',{class:'mono'},money(DB.payments.filter(q=>kids(p).some(k=>k.id===q.studentId)).reduce((a,q)=>a+q.amount,0)))],['Напомнить',remindLinks],['Доступ',p=>accButtons('parent',p.id,p.name,'b')]],DB.parents,'Родителей пока нет.')),
+    h('div',{class:'panel'},h('h2',{},'Добавить родителя'),form([{k:'n',l:'Имя',req:true},{k:'tg',l:'Telegram (@имя)'},{k:'wa',l:'WhatsApp (номер)',ph:'77011234567'},{k:'st',l:'Ребёнок',t:'select',opts:[['','— позже —']].concat(DB.students.map(s=>[s.id,s.name]))}],'Добавить',v=>{
+      var p={id:uid(),name:v.n.trim(),tg:safeHandle(v.tg),wa:v.wa.replace(/\D/g,'')};DB.parents.push(p);var s=by(DB.students,v.st);if(s){s.parentId=p.id;s.parent=p.name}log('Добавлен родитель '+p.name);ui.msg='Родитель добавлен';commit()})),
+    h('div',{class:'panel'},h('h2',{},'Доступ консультантов'),tbl([['Консультант',c=>c.name],['Доступ',c=>accButtons('consultant',c.id,c.name,'b')]],DB.consultants)))}
+function adBank(){return h('div',{},h('h1',{},'Банк ЕНТ'),h('p',{class:'sub'},'Вопросы для пробников. Демо-вопросы замените своими. Результаты сами попадают в прогресс ученика.'),
+  h('div',{class:'panel'},h('h2',{},'Добавить вопрос'),form([{k:'s',l:'Предмет',t:'select',opts:DB.subjects.map(s=>[s.id,s.name])},{k:'q',l:'Вопрос',t:'area',req:true},{k:'a',l:'Вариант 1',req:true},{k:'b',l:'Вариант 2',req:true},{k:'c',l:'Вариант 3'},{k:'d',l:'Вариант 4'},{k:'r',l:'Верный вариант',t:'select',opts:[['0','1'],['1','2'],['2','3'],['3','4']]}],'Добавить',v=>{
+    var raw=[v.a,v.b,v.c,v.d].map(x=>x.trim()),r=Number(v.r);if(!raw[r]){ui.msg='Верным указан пустой вариант';return render(true)}
+    DB.bank.push({id:uid(),subjectId:v.s,q:v.q.trim(),opts:raw.filter(Boolean),ans:raw.slice(0,r).filter(Boolean).length});log('Добавлен вопрос в банк');ui.msg='Вопрос добавлен';commit()})),
+  h('div',{class:'panel'},h('h2',{},'Вопросы ('+DB.bank.length+')'),tbl([['Предмет',q=>subName(q.subjectId)],['Вопрос',q=>q.q],['Верный',q=>q.opts[q.ans]],['',q=>twoStep('Удалить',()=>{DB.bank=DB.bank.filter(y=>y.id!==q.id);commit()},'b sm bad')]],DB.bank,'Банк пуст.')))}
+function adRules(){var st=DB.settings;return h('div',{},h('h1',{},'Правила и оферта'),h('div',{class:'panel'},
+  form([{k:'h',l:'Бесплатная отмена, часов до занятия',t:'number',min:0,max:168,v:st.cancelHours},{k:'rf',l:'Правила возврата',t:'area',max:800,v:st.refundText},{k:'of',l:'Текст публичной оферты',t:'area',max:4000,v:st.offer}],'Сохранить',v=>{
+    st.cancelHours=Math.min(168,Math.max(0,Number(v.h)||0));st.refundText=v.rf;st.offer=v.of;log('Изменены правила отмены и оферта');ui.msg='Сохранено';commit()}),
+  h('p',{class:'sub',style:'margin-top:8px'},'Шаблон не заменяет юриста: проверьте текст до запуска. Оферта открывается по адресу #offer.')))}
+function viewOffer(){var st=DB.settings;return h('div',{class:'pu'},h('div',{class:'wrap sec'},h('button',{class:'pbtn ghost sm',type:'button',onclick:()=>{location.hash=''}},'← Назад'),h('h2',{style:'margin:14px 0'},'Публичная оферта'),
+  h('div',{class:'card'},S(st.offer).split(/\n+/).map(t=>h('p',{style:'margin-bottom:10px'},t))),h('div',{class:'card',style:'margin-top:14px'},h('h3',{},'Отмена и возврат'),h('p',{},'Бесплатная отмена не позднее чем за '+st.cancelHours+' ч до начала занятия.'),h('p',{},st.refundText))))}
+
+/* ================= роутер с проверкой ролей ================= */
+var app=document.getElementById('app');
+function render(keepScroll){
+  var hash=location.hash.replace('#',''),y=window.scrollY,view='public',node;
+  if(hash==='admin'||hash==='student')hash='cabinet';
+  if(hash==='cabinet'){
+    var s=getSess();
+    var me=null;
+    if(s&&s.role==='admin'){view='admin';node=viewAdmin()}
+    else if(s&&s.role==='curator'&&(me=by(DB.curators,s.ref))&&accOf('curator',s.ref)){view='curator';node=viewCurator(me)}
+    else if(s&&s.role==='student'&&(me=by(DB.students,s.ref))&&accOf('student',s.ref)){view='student';node=viewStudent(me)}
+    else if(s&&s.role==='parent'&&(me=by(DB.parents,s.ref))&&accOf('parent',s.ref)){view='curator';node=viewParent(me)}
+    else if(s&&s.role==='consultant'&&(me=by(DB.consultants,s.ref))&&accOf('consultant',s.ref)){view='curator';node=viewConsultant(me)}
+    else{if(s)logout(true);view='cabinet';node=viewCabinet()}
+  }else if(hash==='offer')node=viewOffer();
+  else{node=viewPublic();node.append(h('div',{class:'wrap',style:'padding:20px 0 40px;text-align:center'},h('button',{class:'pbtn ghost sm',type:'button',onclick:function(){location.hash='offer'}},'Публичная оферта и правила отмены')))}
+  document.body.className='v-'+view;
+  app.replaceChildren(node);
+  if(keepScroll===true)window.scrollTo(0,y);
+}
+window.addEventListener('hashchange',function(){ui.msg='';ui.bookFor=null;if(location.hash!=='#cabinet')ui.loginRole=null;render();window.scrollTo(0,0)});
+document.documentElement.lang=LANG;langBox();render();
+})();
+</script>
+
+</body></html>
